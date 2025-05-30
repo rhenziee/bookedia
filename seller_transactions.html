@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/sellerpage_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>BOOKEDIA Seller's Transactions Page</title>
+</head>
+<body>
+    <div id="seller">
+        <div class="header_container">
+            <div class="logo">
+                <img src="../static/logo/bookedia logo.png" alt="Bookedia Logo">
+            </div>
+            <div class="icons">
+                <a href="{{ url_for('seller_accounts_message') }}">
+                    <div class="message">
+                        <img src="/static/icons/chat-round-dots-svgrepo-com 5.png" alt="Messages">
+                    </div>
+                </a>
+                <a href="{{ url_for('seller_notification') }}">
+                    <div class="notification">
+                        <img src="../static/icons/Bell.png" alt="Notifications" class="icon">
+                    </div>
+                </a>
+                <div class="profilepic">
+                    <button class="dropbtn"><img src="../static/icons/user.png" class="pfp"><img src="/static/icons/Expand_down.png" class="arrowdown"></button>
+                    <div class="dropdown-account">
+                        <a href="{{ url_for('seller_accounts') }}">Account</a>
+                        <a href="/logout">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li>
+                    <div class="home">
+                        <img src="../static/icons/Home1.png" alt="Home Icon">
+                        <a href="{{ url_for('seller_home') }}" id="homePage">Home</a>
+                    </div>
+                    <div class="inventory">
+                        <img src="../static/icons/Boxes_light.png" alt="Inventory Icon">
+                        <a href="{{ url_for('seller_inventory') }}" id="inventoryPage">Inventory</a>
+                    </div>
+                    <div class="transaction">
+                        <img src="../static/icons/Transger_light.png" alt="Transaction Icon">
+                        <a href="{{ url_for('seller_transactions') }}" id="transactionPage">Transaction</a>
+                    </div>
+                    <div class="shipping">
+                        <img src="../static/icons/fast 1.png" alt="Shipping Icon">
+                        <a href="{{ url_for('seller_shippingstatus') }}" id="shippingPage">Shipping Status</a>
+                    </div>
+                    <div class="shipping">
+                        <img src="../static/icons/fast 1.png" alt="Shipping Icon">
+                        <a href="{{ url_for('seller_accounts_salesreport' ) }}" id="shippingPage">Sales Report</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="transactions_frame" id="transactionframe">
+            <div class="transaction_page">
+                <div class="transactions_header">
+                    <h1>PENDING ORDERS</h1>
+                    <div class="transactions_calendar">
+                        <form action="post">
+                            <div class="calendar_label">
+                                <label for="date">Sort by date:</label>
+                            </div>
+                            <div class="calendar_date">
+                                <input type="date" name="date">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="transactions_maintable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Recipient Name</th>
+                                <th>Total</th>
+                                <th>Shipping Fee</th>
+                                <th>Shipping Address</th>
+                                <th>Payment Method</th>
+                  
+                                <th>Order Date</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in pending_orders %}
+                            <tr>
+                                <td>{{ order[0] }}</td> <!-- Order ID -->
+                               
+                                <td>₱{{ order[2] }}</td> <!-- Total Price -->
+                                <td>₱{{ order[3] }}</td> <!-- Shipping Fee -->
+                                <td>{{ order[4] }}</td> <!-- Shipping Address -->
+                                <td>{{ order[5] }}</td> <!-- Payment Method -->
+                                <td>
+                                    <select class="status-dropdown" data-order-id="{{ order[0] }}">
+                                        <option value="Pending" {% if order[6] == "Pending" %}selected{% endif %}>Pending</option>
+                                        <option value="Pick Up" {% if order[6] == "Pick Up" %}selected{% endif %}>Pick Up</option>
+                                    </select>
+                                </td>
+                            
+                                <td>{{ order[8] }}</td> <!-- Estimated Delivery Date -->
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+            </div>
+        </div>
+
+        <script>
+            // D R O P D O W N   B U T T O N
+            document.querySelector('.dropbtn').addEventListener('click', function(event) {
+                event.preventDefault();
+                const dropdown = document.querySelector('.dropdown-account');
+                dropdown.classList.toggle('show');
+                const arrowIcon = document.querySelector('.arrowdown');
+                arrowIcon.classList.toggle('rotate'); 
+            });
+
+            window.addEventListener('click', function(event) {
+                if (!event.target.closest('.profilepic')) {
+                    document.querySelector('.dropdown-account').classList.remove('show');
+                    const arrowIcon = document.querySelector('.arrowdown');
+                    arrowIcon.classList.remove('rotate'); 
+                }
+            });
+
+            const links = document.querySelectorAll('nav ul li a');
+            links.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    const dropdown = document.querySelector('.dropdown-account');
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                        const arrowIcon = document.querySelector('.arrowdown');
+                        arrowIcon.classList.remove('rotate'); 
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.querySelectorAll('.status-dropdown').forEach(dropdown => {
+    dropdown.addEventListener('change', function() {
+        const orderId = this.getAttribute('data-order-id');
+        const newStatus = this.value;
+
+        fetch('/update_status', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ order_id: orderId, status: newStatus })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert('Order status updated to: ' + newStatus);
+            } else {
+                alert('Error updating order status: ' + data.error);
+                // Revert selection if update fails
+                this.value = this.getAttribute('data-previous-value');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            this.value = this.getAttribute('data-previous-value'); // Restore old value
+        });
+    });
+
+    // Store initial selection to revert on failure
+    dropdown.setAttribute('data-previous-value', dropdown.value);
+});
+
+        </script>
+            
+    </div>
+</body>
+</html>

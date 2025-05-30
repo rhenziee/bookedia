@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/sellerpage_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>BOOKEDIA Seller's Message Page</title>
+    <style>
+ 
+/* Notifications and Messages Layout */
+.notif_frame {
+    margin-top: 80px; 
+    padding: 20px;
+    
+}
+
+.title_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back_button {
+    background-color: #fff;
+    color: black;
+    border: 1px solid #ddd;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    margin-top: -10px;
+}
+
+.back_button:hover {
+    background-color: #8B5E34;
+    color: white;
+}
+
+.back_img img {
+    width: 40px;
+    margin-right: 8px;
+}
+
+.notif_title {
+    text-align: center;
+    margin-top: -20px;
+}
+
+.notif_ctn {
+    margin-top: -20px;
+    
+}
+
+.notif_content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: 60%;
+}
+
+.notif1 {
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.notif1 img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-info h1, .message-info h2 {
+    margin: 5px 0;
+}
+
+.date h3 {
+    color: #888;
+    font-size: 12px;
+}
+
+.reply-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.replyInput {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.sendReplyBtn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 150px;
+}
+
+.sendReplyBtn:hover {
+    background-color: #218838;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+    .back_button {
+        font-size: 14px;
+    }
+
+    .back_img img {
+        width: 16px;
+    }
+
+    .notif1 {
+        padding: 10px;
+    }
+
+    .replyInput {
+        font-size: 14px;
+    }
+
+    .sendReplyBtn {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div id="seller">
+        <div class="headernotif_container">
+            <div class="logo">
+                <img src="../static/logo/bookedia logo.png">
+            </div>
+            <div class="icons">
+                <a href="seller_accounts_message.html">
+                    <div class="message">
+                        <img src="/static/icons/chat-round-dots-svgrepo-com 5.png">
+                    </div>
+                </a>
+                <a href="seller_notification.html">
+                    <div class="notification">
+                        <img src="/static/icons/Bell.png" alt="User" class="icon">
+                    </div>
+                </a>
+                <div class="profilepic">
+                    <button class="dropbtn"><img src="/static/profile pic.png" class="pfp"><img src="/static/icons/Expand_down.png" class="arrowdown"></button>
+                    <div class="dropdown-account">
+                        <a href="seller_accounts.html">Account</a>
+                        <a href="/logout">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notif_frame">
+        <div class="title_container">
+            <div class="backbtn">
+                <button class="back_button" onclick="window.location.href='/seller_home'">
+                    <div class="back_img">
+                        <img src="/static/icons/Expand_left.png" alt="">
+                    </div>
+                    <h2>Back</h2>
+                </button>
+            </div>
+        </div>
+        <div class="notif_title">
+            <h1>MESSAGE</h1>
+        </div>
+        <div class="notif_ctn">
+            <div class="notif_content">
+                <div id="messageContainer">
+                    <!-- Messages will be injected here -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('.dropbtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            const dropdown = document.querySelector('.dropdown-account');
+            dropdown.classList.toggle('show');
+            const arrowIcon = document.querySelector('.arrowdown');
+            arrowIcon.classList.toggle('rotate');
+        });
+
+        window.addEventListener('click', function(event) {
+            if (!event.target.closest('.profilepic')) {
+                document.querySelector('.dropdown-account').classList.remove('show');
+                document.querySelector('.arrowdown').classList.remove('rotate');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const recipientId = '{{ recipient_id }}'; 
+
+            function loadMessages() {
+                fetch(`/get_messages?recipient_id=${recipientId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const groupedMessages = groupMessagesByBuyerAndProduct(data);
+                        displayGroupedMessages(groupedMessages);
+                    })
+                    .catch(error => console.error('Error fetching messages:', error));
+            }
+
+            function groupMessagesByBuyerAndProduct(messages) {
+                const grouped = {};
+
+                messages.forEach(msg => {
+                    // Group by both buyer and seller using sender_id and recipient_id
+                    const key = `${Math.min(msg.sender_id, msg.recipient_id)}-${Math.max(msg.sender_id, msg.recipient_id)}-${msg.product_name}`;
+                    if (!grouped[key]) {
+                        grouped[key] = [];
+                    }
+                    grouped[key].push(msg);
+                });
+
+                return grouped;
+            }
+
+
+            function displayGroupedMessages(groupedMessages) {
+                const messageContainer = document.getElementById('messageContainer');
+                messageContainer.innerHTML = '';
+
+                for (const key in groupedMessages) {
+                    const messages = groupedMessages[key];
+                    const senderId = messages[0].sender_id;
+                    const productName = messages[0].product_name || 'N/A';
+
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('notif1');
+
+                    const formattedMessages = messages
+                        .map(msg => `<p>${msg.message}</p>`)
+                        .join('');
+
+                    messageElement.innerHTML = `
+                        <img src="../static/icons/user.png" alt="Profile Picture">
+                        <div class="message-info">
+                            <h1>Sender ID: ${senderId}</h1>
+                            <h2>Product: ${productName}</h2>
+                            ${formattedMessages}
+                        </div>
+                        <div class="date">
+                            <h3>${new Date(messages[messages.length - 1].timestamp).toLocaleString()}</h3>
+                        </div>
+                        <div class="reply-container">
+                            <input type="text" class="replyInput" placeholder="Type your reply here..." data-sender-id="${senderId}" data-product-name="${productName}" />
+                            <button class="sendReplyBtn" data-sender-id="${senderId}" data-product-name="${productName}">Send Reply</button>
+                        </div>
+                    `;
+
+                    messageContainer.appendChild(messageElement);
+                }
+
+                // Attach reply event listeners to each conversation's reply button
+                document.querySelectorAll('.sendReplyBtn').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const replyInput = button.previousElementSibling; // Get the input before the button
+                        const replyMessage = replyInput.value.trim();
+                        const productName = replyInput.getAttribute('data-product-name'); // Get the product name
+                        const senderId = button.getAttribute('data-sender-id'); // This is the buyer who sent the original message
+
+                        if (replyMessage) {
+                            sendReply(replyMessage, recipientId, senderId, productName); // Pass senderId and product name to sendReply
+                            replyInput.value = ''; // Clear the input
+                        }
+                    });
+                });
+            }
+
+            function sendReply(message, recipientId, senderId, productName) {
+                fetch('/seller/send_reply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message,
+                        recipient_id: senderId,  // Buyer (original sender) is the recipient of this reply
+                        product_name: productName
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    loadMessages();  // Reload messages to reflect the reply
+                })
+                .catch(error => console.error('Error sending reply:', error));
+            }
+
+
+
+            loadMessages();
+        });
+    </script>
+    
+</body>
+</html>

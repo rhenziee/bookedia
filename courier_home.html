@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/courier_home.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <title>BOOKEDIA Courier's Dashboard Page</title>
+</head>
+<body>
+    <div id="seller">
+        <div class="header_container">
+            <div class="logo">
+                <img src="../static/logo/bookedia logo.png">
+            </div>
+            
+            <div class="icons">
+
+                
+
+                <a href="{{ url_for('courier_notification' ) }}">
+                    <div class="notification">
+                        <img src="../static/icons/Bell.png" alt="User" class="icon">
+                    </div>
+                </a>
+                
+                <div class="profilepic">
+                    <button class="dropbtn"><img src="../static/icons/user.png" class="pfp"><img src="/static/icons/Expand_down.png" class="arrowdown"></button>
+                    <div class="dropdown-account">
+                        <a href="{{ url_for('seller_accounts') }}">Account</a>
+                        <a href="/logout">Log Out</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        <nav>
+            <ul>
+                <li>
+                    <div class="home">
+                        <a href="{{ url_for('courier_home' ) }}" id="homePage">Home</a>
+                      
+                    </div>
+                    <div class="topickup">
+                        <a href="{{ url_for('courier_topickup' ) }}" id="#">T0 Pick Up</a>
+                        
+                    </div>
+        
+                    <div class="inventory">
+                        <a href="{{ url_for('courier_pending' ) }}"  id="#">To Ship</a>
+                    </div>
+        
+                    <div class="transaction">
+                        <a href="{{ url_for('courier_delivered' ) }}"  id="transactionPage">Delivered Shipments</a>
+                    </div>
+        
+                    <div class="shipping">
+                        <a href="{{ url_for('courier_settings' ) }}" id="shippingPage">Account Settings</a>
+                    </div>
+
+                   
+        
+
+                </li>
+            </ul>
+        </nav>
+        
+<!-- D A S H B O A R D -->
+        <div class="dashboard_frame" id="dashboardpage">
+            <div class="dashboard_container">
+                <div class="dashboard">
+                    <h1>DASHBOARD</h1>
+                </div>
+                <div class="dashboard1">
+                    <!-- TODAY'S ORDER -->
+                   
+                <div class="todays_order">
+                    <div class="to_title">
+                        <h2>TOTAL SHIPMENTS</h2>
+                    </div>
+                    <div class="img_container">
+                        <img src="../static/icons/package.png">
+                    </div>
+                    <div class="total_tdyorders">
+                        <h1>{{ total_orders }}</h1>
+                    </div>
+                </div>
+
+                <!-- PENDING SHIPMENTS -->
+                <div class="completed_orders">
+                    <div class="co_title">
+                        <h2>PENDING SHIPMENTS</h2>
+                    </div>
+                    <div class="img_container">
+                        <img src="../static/icons/Group 317.png">
+                    </div>
+                    <div class="total_penorders">
+                        <h1>{{ pending_orders }}</h1>
+                    </div>
+                </div>
+
+                <!-- DELIVERED SHIPMENTS -->
+                <div class="completed_orders">
+                    <div class="co_title">
+                        <h2>DELIVERED SHIPMENTS</h2>
+                    </div>
+                    <div class="img_container">
+                        <img src="../static/icons/package_car.png">
+                    </div>
+                    <div class="total_coorders">
+                        <h1>{{ completed_orders }}</h1>
+                    </div>
+                </div>
+
+
+                    <div class="dashboard_table">
+
+                    </div>
+                    
+    <!-- G R A P H S -->
+
+        </div>
+    </div>
+    
+    <script>
+        // N A V   B A R
+        
+        // D R O P D O W N   B U T T O N
+        document.querySelector('.dropbtn').addEventListener('click', function(event) {
+            // Prevent default behavior
+            event.preventDefault();
+        
+            // Toggle the "show" class on the dropdown content
+            const dropdown = document.querySelector('.dropdown-account');
+            dropdown.classList.toggle('show');
+        
+            // Optionally, you can add the rotation effect for the arrow icon here
+            const arrowIcon = document.querySelector('.arrowdown');
+            arrowIcon.classList.toggle('rotate'); // Toggle rotation class
+        });
+        
+        // Close the dropdown if the user clicks outside of the dropdown or the button
+        window.addEventListener('click', function(event) {
+            // If the click is outside the dropdown and the button, close the dropdown
+            if (!event.target.closest('.profilepic')) {
+                document.querySelector('.dropdown-account').classList.remove('show');
+        
+                // Reset the arrow icon rotation
+                const arrowIcon = document.querySelector('.arrowdown');
+                arrowIcon.classList.remove('rotate'); // Remove rotation class
+            }
+        });
+        
+        // Get all the anchor links
+        const links = document.querySelectorAll('nav ul li a');
+        
+        // Add click event listener to each link
+        links.forEach(link => {
+            link.addEventListener('click', function(event) {
+                // Remove 'active' class from all links
+                links.forEach(l => l.classList.remove('active'));
+        
+                // Add 'active' class to the clicked link
+                this.classList.add('active');
+        
+                // Close the dropdown if it's open
+                const dropdown = document.querySelector('.dropdown-account');
+                if (dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+        
+                    // Reset the arrow icon rotation
+                    const arrowIcon = document.querySelector('.arrowdown');
+                    arrowIcon.classList.remove('rotate'); // Remove rotation class
+                }
+            });
+        });
+        
+
+        
+        // Function to fetch today's orders
+        fetch(`/api/today_orders/${sellerId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.total_tdyorders h1').textContent = data.today_orders;
+            });
+        
+        // Function to fetch completed orders
+        fetch(`/api/completed_orders/${sellerId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.total_coorders h1').textContent = data.completed_orders;
+            });
+        
+        // Function to fetch inventory
+        fetch(`/api/inventory/${sellerId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.inventory_table tbody').innerHTML = `<tr>
+                    <td>Available Products</td>
+                    <td>${data.inventory}</td>
+                </tr>`;
+            });
+        
+        // Function to fetch revenue data
+        fetch(`/api/revenue/${sellerId}`)
+            .then(response => response.json())
+            .then(data => {
+                const months = data.revenue.map(item => item[0]);
+                const revenues = data.revenue.map(item => item[1]);
+        
+                var ctx = document.getElementById('revenueBarChart').getContext('2d');
+                var revenueBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Revenue (in ₱10,000)',
+                            data: revenues,
+                            backgroundColor: ['#884B25', '#AD6639', '#884B25', '#AD6639', '#884B25', '#AD6639']
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+        
+        // Function to fetch gross sales data
+        fetch(`/api/gross_sales/${sellerId}`)
+            .then(response => response.json())
+            .then(data => {
+                const months = data.sales.map(item => item[0]);
+                const sales = data.sales.map(item => item[1]);
+        
+                var ctx = document.getElementById('salesLineChart').getContext('2d');
+                var salesLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Gross Sales (in ₱10,000)',
+                            data: sales,
+                            backgroundColor: '#884B25',
+                            borderColor: '#AD6639',
+                            borderWidth: 1.5,
+                            pointBackgroundColor: '#884B25',
+                            pointBorderColor: '#fff',
+                            pointHoverRadius: 6,
+                            pointHoverBackgroundColor: '#AD6639',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        
+</body>
+</html>
+

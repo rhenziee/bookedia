@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/registration.css">
+    <title>Registration Form</title>
+
+    
+
+    <script>
+        function openModal(message, showGif = false) {
+            document.getElementById('modalMessage').textContent = message;
+            const modalGif = document.getElementById('modalGif');
+            modalGif.style.display = showGif ? 'block' : 'none'; // Show or hide GIF
+            document.getElementById('customModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        function toggleSellerFields() {
+            const sellerFields = document.getElementById('sellerFields');
+            const isSellerSelected = document.getElementById('seller').checked;
+            sellerFields.classList.toggle('hidden', !isSellerSelected); //  visibility
+        }
+        function toggleUserTypeFields() {
+    const sellerFields = document.getElementById('sellerFields');
+    const courierFields = document.getElementById('courierFields');
+
+    const isSellerSelected = document.getElementById('seller').checked;
+    const isCourierSelected = document.getElementById('courier').checked;
+
+    // Toggle visibility based on selected user type
+    sellerFields.classList.toggle('hidden', !isSellerSelected);
+    courierFields.classList.toggle('hidden', !isCourierSelected);
+}
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('registrationForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+
+                fetch('/submit_form', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        openModal(data.message, true);
+                        setTimeout(() => {
+                            closeModal();
+                            window.location.href = '/';
+                        }, 4000);
+                    } else {
+                        openModal(data.message, false);
+                    }
+                })
+                .catch(error => {
+                    openModal('An unexpected error occurred.', false);
+                    console.error('Error:', error);
+                });
+            });
+        });
+
+        function displayFileName(inputId, displayId) {
+            const fileInput = document.getElementById(inputId);
+            const fileNameDisplay = document.getElementById(displayId);
+            fileNameDisplay.textContent = fileInput.files.length > 0 ? fileInput.files[0].name : 'Click to upload image';
+        }
+
+       
+$(document).ready(function () {
+    // Fetch provinces
+    $.get('/get_provinces', function (data) {
+        if (data.length > 0) {
+            data.forEach(function (province) {
+                $('#province').append(`<option value="${province}">${province}</option>`);
+            });
+        }
+    });
+
+    // Fetch municipalities based on province
+    $('#province').change(function () {
+        const province = $(this).val();
+        $('#municipality').html('<option value="">Select Municipality</option>');
+        $('#barangay').html('<option value="">Select Barangay</option>');
+        $('#zip_code').val('');
+        if (province) {
+            $.get(`/get_municipalities/${province}`, function (data) {
+                if (data.length > 0) {
+                    data.forEach(function (municipality) {
+                        $('#municipality').append(`<option value="${municipality}">${municipality}</option>`);
+                    });
+                }
+            });
+        }
+    });
+
+    // Fetch barangays based on municipality
+    $('#municipality').change(function () {
+        const province = $('#province').val();
+        const municipality = $(this).val();
+        $('#barangay').html('<option value="">Select Barangay</option>');
+        $('#zip_code').val('');
+        if (municipality) {
+            $.get(`/get_barangays/${province}/${municipality}`, function (data) {
+                $('#barangay').html('<option value="">Select Barangay</option>');  // Clear previous barangays
+                for (const barangay in data) {
+                    $('#barangay').append(`<option value="${barangay}">${barangay}</option>`);
+                }
+            });
+        }
+    });
+
+    // Fetch zip code based on barangay
+    $('#barangay').change(function () {
+        const province = $('#province').val();
+        const municipality = $('#municipality').val();
+        const barangay = $(this).val();
+        if (barangay) {
+            $.get(`/get_zip_code/${province}/${municipality}/${barangay}`, function (data) {
+                $('#zip_code').val(data);
+            });
+        }
+    });
+});
+
+
+
+
+
+
+
+    </script>
+
+</head>
+<body>
+    <div class="slideshow-container">
+        <div class="slideshow">
+            <div class="slide active" style="background-image: url('../static/slideshow/login_bg.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/dvd1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/educ1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Gaming1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/books2.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Magazines 1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Gaming3.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Movie1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Magazines2.png');"></div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="login-box">
+            <!-- Left Side - Registration Form -->
+            <div class="left-side">
+                <form id="registrationForm" action="/submit_form" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <!-- Name Fields -->
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="surname">Last Name:</label>
+                            <input type="text" id="surname" name="surname" required oninput="blockInvalidChars(this)">
+                            <div id="surnameError" class="error-message"></div>
+                        </div>
+                        <div class="input-field">
+                            <label for="firstname">First Name:</label>
+                            <input type="text" id="firstname" name="firstname" required oninput="blockInvalidChars(this)">
+                            <div id="firstnameError" class="error-message"></div>
+                        </div>
+                        <div class="input-field">
+                            <label for="middle_initial">Middle Initial:</label>
+                            <input type="text" id="middle_initial" name="middle_initial" oninput="blockInvalidChars(this)">
+                            <div id="middle_initialError" class="error-message"></div>
+                        </div>
+                    </div>
+    
+                    <!-- Contact and Email Fields -->
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value="{{ email }}" readonly>
+                            <div id="emailError" class="error-message"></div>
+                        </div>
+                        <div class="input-field">
+                            <label for="contact">Contact:</label>
+                            <input type="text" id="contact" name="contact" required oninput="blockInvalidCharsForContact(this)">
+                            <div id="contactError" class="error-message"></div>
+                        </div>
+                    </div>
+    
+                    <!-- Address Fields -->
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="province">Province:</label>
+                            <select id="province" name="province" required>
+                                <option value="">Select Province</option>
+                            </select>
+                            <div id="provinceError" class="error-message"></div>
+                        </div>
+                        <div class="input-field">
+                            <label for="municipality">Municipality:</label>
+                            <select id="municipality" name="municipality" required>
+                                <option value="">Select Municipality</option>
+                            </select>
+                            <div id="municipalityError" class="error-message"></div>
+                        </div>
+                        <div class="input-field">
+                            <label for="barangay">Barangay:</label>
+                            <select id="barangay" name="barangay" required>
+                                <option value="">Select Barangay</option>
+                            </select>
+                            <div id="barangayError" class="error-message"></div>
+                        </div>
+                    </div>
+    
+                    <!-- Zip Code -->
+                    <div class="input-group">
+                        <div class="input-field">
+                            <label for="zip_code">Zip Code:</label>
+                            <input type="text" id="zip_code" name="zip_code" readonly required>
+                            <div id="zip_codeError" class="error-message"></div>
+                        </div>
+                    
+    
+                    <!-- Password -->
+                    
+                        <div class="input-field">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password">
+                            <div id="passwordError" class="error-message"></div>
+                        </div>
+                    </div>
+                        <!-- User Type -->
+                        <div class="radio-input-wrapper">
+                            <label>User Type:</label>
+                            <label class="label">
+                                <input value="buyer" name="userType" id="buyer" class="radio-input" type="radio" onclick="toggleUserTypeFields()">
+                                <div class="radio-design"></div>
+                                <div class="label-text">Buyer</div>
+                            </label>
+                            <label class="label">
+                                <input value="seller" name="userType" id="seller" class="radio-input" type="radio" onclick="toggleUserTypeFields()">
+                                <div class="radio-design"></div>
+                                <div class="label-text">Seller</div>
+                            </label>
+                            <label class="label">
+                                <input value="courier" name="userType" id="courier" class="radio-input" type="radio" onclick="toggleUserTypeFields()">
+                                <div class="radio-design"></div>
+                                <div class="label-text">Courier</div>
+                            </label>
+                            
+                        </div>
+                        <div class="file-upload-container">
+                            <!-- ID Upload -->
+                            <div>
+                                <label for="idUpload" class="idlabel">Upload ID:</label>
+                                <label for="idUpload" class="custom-file-upload">
+                                    <div class="icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="..." fill="#000"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="text">
+                                        <span id="idFileName">Click to upload image</span>
+                                    </div>
+                                    <input id="idUpload" type="file" name="idUpload" accept="image/*" onchange="displayFileName('idUpload', 'idFileName')" />
+                                </label>
+                            </div>
+                        
+                            <!-- Business Permit (Hidden Initially) -->
+                            <div id="sellerFields" class="hidden">
+                                <label for="businessCertUpload" class="businesscertlabel">Business Permit:</label>
+                                <label for="businessCertUpload" class="custom-file-upload">
+                                    <div class="icon">
+                                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="..." fill="#000"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="text">
+                                        <span id="businessCertFileName">Click to upload image</span>
+                                    </div>
+                                    <input id="businessCertUpload" type="file" name="businessCertUpload" accept="image/*" onchange="displayFileName('businessCertUpload', 'businessCertFileName')" />
+                                </label>
+                            </div>
+                            <div id="courierFields" class="hidden flex-row" style="gap: 20px; align-items: flex-start;">
+                                <!-- Driver's License -->
+                                <div class="field-group">
+                                    <label for="driversLicense" class="businesscertlabel">Driver's License:</label>
+                                    <label for="driversLicense" class="custom-file-upload">
+                                        <div class="icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="..." fill="#000"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text">
+                                            <span id="driversLicenseFileName">Click to upload image</span>
+                                        </div>
+                                        <input id="driversLicense" type="file" name="driversLicense" accept="image/*" onchange="displayFileName('driversLicense', 'driversLicenseFileName')" />
+                                    </label>
+                                </div>
+                            
+                                <!-- Resume -->
+                                <div class="field-group">
+                                    <label for="resumeUpload" class="businessCertFileName">Resume:</label>
+                                    <label for="resumeUpload" class="custom-file-upload">
+                                        <div class="icon">
+                                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="..." fill="#000"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="text">
+                                            <span id="resumeFileName">Click to upload file</span>
+                                        </div>
+                                        <input id="resumeUpload" type="file" name="resumeUpload" accept=".pdf,.doc,.docx" onchange="displayFileName('resumeUpload', 'resumeFileName')" />
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+
+
+                    <!-- Submission Buttons -->
+                    <div class="form-group">
+                        <button type="button" class="cancel-btn" onclick="window.location.href='/'">Back to Login</button>
+                        <button type="submit" class="login-btn">Register</button>
+                    </div>
+                </form>
+            </div>
+    
+            <!-- Right Side -->
+            <div class="right-side">
+                <div class="logo">
+                    <img src="../static/icons/logo.png" alt="Logo">
+                </div>
+                <div class="image">
+                    <img src="../static/icons/signuppic.png" alt="Sign Up">
+                </div>
+                <div class="TEXT-SIGNUP">
+                    <h1>SIGN UP</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script>
+
+function blockInvalidChars(input) {
+    //  allow only letters and spaces
+    const regex = /[^a-zA-Z\s]/g;
+    
+    // invalid characters
+    input.value = input.value.replace(regex, '');
+}
+// block invalid characters 
+function blockInvalidCharsForContact(input) {
+  
+    const regex = /[^0-9]/g;
+    
+    
+    input.value = input.value.replace(regex, '');
+
+    // limit the input to 12 digits
+    if (input.value.length > 12) {
+        input.value = input.value.substring(0, 12); 
+    }
+}
+
+
+// validate fields on input
+function validateField(input) {
+    const fieldId = input.id;
+    const errorMessage = document.getElementById(`${fieldId}Error`);
+    let isValid = true;
+
+
+    errorMessage.textContent = "";
+
+
+    if (fieldId === "contact") {
+       
+        const contactRegex = /^[0-9]{11}$/;
+        if (!contactRegex.test(input.value)) {
+            errorMessage.textContent = "Please enter a valid 11-digit contact number.";
+            isValid = false;
+        }
+    } else if (fieldId === "zip_code") {
+        const zipCodeRegex = /^[0-9]{4}$/;
+        if (!zipCodeRegex.test(input.value)) {
+            errorMessage.textContent = "Please enter a valid 4-digit zip code.";
+            isValid = false;
+        }
+    } else if (fieldId === "email") {
+        // Email validation
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(input.value)) {
+            errorMessage.textContent = "Please enter a valid email address.";
+            isValid = false;
+        }
+    } else if (fieldId === "password") {
+        // Validate password 
+        if (input.value.length < 10) {
+            errorMessage.textContent = "Password must be at least 10 characters.";
+            isValid = false;
+        }
+    } else if (fieldId === "surname" || fieldId === "firstname" || fieldId === "middle_initial") {
+    // Validate surname, firstname, and middle initial fields 
+    if (input.value.trim() === "") {
+        errorMessage.textContent = `${fieldId.charAt(0).toUpperCase() + fieldId.slice(1)} is required.`;
+        isValid = false;
+    }
+    
+    const nameRegex = /^[a-zA-Z\s]*$/; 
+    if (!nameRegex.test(input.value)) {
+        errorMessage.textContent = `${fieldId.charAt(0).toUpperCase() + fieldId.slice(1)} must contain only letters and spaces.`;
+        isValid = false;
+    }
+}
+
+    return isValid;
+}
+
+// Validate form before submitting
+function validateForm() {
+    const inputs = document.querySelectorAll('.input-field input, .input-field select');
+    let formIsValid = true;
+
+    inputs.forEach(input => {
+        if (!validateField(input)) {
+            formIsValid = false;
+        }
+    });
+
+    return formIsValid;
+}
+
+document.querySelectorAll('.input-field input, .input-field select').forEach(input => {
+    input.addEventListener('input', () => validateField(input));
+});
+
+    </script>
+    
+    <script>
+        fetch('/get_provinces')
+            .then(response => response.json())
+            .then(data => {
+                const provinceSelect = document.getElementById("province");
+                data.forEach(province => {
+                    const option = document.createElement("option");
+                    option.value = province;
+                    option.textContent = province;
+                    provinceSelect.appendChild(option);
+                });
+            });
+    
+        // Fetch municipalities based on selected province
+        document.getElementById("province").addEventListener("change", function() {
+            const province = this.value;
+            if (province) {
+                fetch(`/get_municipalities/${province}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const municipalitySelect = document.getElementById("municipality");
+                        municipalitySelect.innerHTML = '<option value="">Select Municipality</option>';
+                        data.forEach(municipality => {
+                            const option = document.createElement("option");
+                            option.value = municipality;
+                            option.textContent = municipality;
+                            municipalitySelect.appendChild(option);
+                        });
+                        // Reset barangay and zip code fields
+                        document.getElementById("barangay").innerHTML = '<option value="">Select Barangay</option>';
+                        document.getElementById("zip_code").value = '';
+                    });
+            }
+        });
+    
+        // Fetch barangays based on selected municipality
+        document.getElementById("municipality").addEventListener("change", function() {
+            const province = document.getElementById("province").value;
+            const municipality = this.value;
+            if (municipality) {
+                fetch(`/get_barangays/${province}/${municipality}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const barangaySelect = document.getElementById("barangay");
+                        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+                        for (const barangay in data) {
+                            const option = document.createElement("option");
+                            option.value = barangay;
+                            option.textContent = barangay;
+                            barangaySelect.appendChild(option);
+                        }
+                        // Reset zip code field
+                        document.getElementById("zip_code").value = '';
+                    });
+            }
+        });
+    
+        // Fetch zip code based on selected barangay
+        document.getElementById("barangay").addEventListener("change", function() {
+            const province = document.getElementById("province").value;
+            const municipality = document.getElementById("municipality").value;
+            const barangay = this.value;
+            if (barangay) {
+                fetch(`/get_zip_code/${province}/${municipality}/${barangay}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById("zip_code").value = data;
+                    });
+            }
+        });
+    </script> 
+    <!-- Modal structure -->
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Message</div>
+            <div class="modal-body">
+                <img id="modalGif" src="../static/icons/success-unscreen.gif" alt="Modal GIF" style="display: none; width: 200px; margin: 0 auto;">
+                <p id="modalMessage">Some message here.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

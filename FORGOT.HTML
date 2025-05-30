@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Forgot Password</title>
+    <style>
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background-image: url('../static/login_bg.png');
+        font-family: Arial, sans-serif;
+    }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+/* Background slideshow */
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; 
+            overflow: hidden; 
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            background-size: cover; 
+            background-position: center; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0; 
+            transition: opacity 1s ease-in-out;
+        }
+
+        .active {
+            opacity: 0.5; 
+        }
+        .container {
+            width: 100%;
+            min-width: 200px;
+            max-width: 400px;
+            margin: 50px auto;
+            background: #432818;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-left: 30px ;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            
+        }
+        input[type="password"]{
+            width: 80%;
+            padding: 10px;
+            margin-left: 30px ;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            margin-top: 30px;
+        }
+        button {
+            background-color: #884B25;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 50%;
+            margin-top: 8px;
+            margin-left: 105px;
+            margin-right: 80px;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+        button1 {
+        
+
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 50%;
+            top: -10px;
+            margin-top: 10px;
+            margin-left: 140px;
+            font-size: 13px;
+
+
+        }
+
+        button:hover {
+            background-color: #b16c3c;
+        }
+
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+    <script>
+           document.addEventListener('DOMContentLoaded', function () {
+        let slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const slideInterval = setInterval(nextSlide, 1000);
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+    });
+
+    </script>
+</head>
+<body>
+    <div class="slideshow-container">
+        <div class="slideshow">
+            <div class="slide active" style="background-image: url('../static/slideshow/login_bg.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/dvd1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/educ1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Gaming1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/books2.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Magazines 1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Gaming3.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Movie1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Magazines2.png');"></div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Reset Your Password</h1>
+
+        <!-- Reset Password Form -->
+        <form method="POST" action="{{ url_for('forgot') }}">
+            <input type="password" name="new_password" placeholder="New Password" required>
+            <button type="submit">Reset Password</button>
+        </form>
+        
+    </div>
+</body>
+</html>
