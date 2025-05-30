@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookedia - Manage Users</title>
+    <link rel="stylesheet" href="../static/manageuser.css">
+</head>
+<body>
+
+    <div id="admin">
+        <div class="header_container">
+            <div class="logo">
+                <img src="../static/icons/logo.png" alt="Bookedia Logo">
+            </div>
+            
+            <div class="icons">
+                <!-- <div class="message">
+                    <img src="../static/icons/message.png" alt="Message Icon">
+                </div> -->
+                
+                <div class="notification">
+                    <img src="../static/icons/Bell.png" alt="Bell Icon" onclick="window.location.href='/admin_notif'">
+                </div>
+                <div class="profilepic">
+                    <button class="dropbtn"><img src="../static/icons/user.png" class="pfp"><img src="../static/icons/arrowdown.png" class="arrowdown"></button>
+                    <div class="dropdown-account">
+
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        <nav>
+            <ul>
+                <li>
+                    <div class="home">
+                        <a href="{{ url_for('admin_home' ) }}"  id ="home">Home</a>
+                    </div>
+        
+                    <div class="manage_users">
+                        <a href="{{ url_for('manageuser' ) }}" id="manage_users">Manage User</a>
+                    </div>
+        
+                    <div class="report_queries">
+                        <a href="{{ url_for('admin_salesreport' ) }}" id="report_queries"> Sales Report</a>
+                    </div>
+        
+                    <div class="settings">
+                        <a href="{{ url_for('admin_setting' ) }}" id="settings">Settings</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <div class="container">
+
+        <div class="box">
+                    <!-- Back Button -->
+                    <a href="{{ url_for('manageuser') }}" class="back-button">Back </a>
+
+            <h4>Declined Requests</h4>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>ID</th>
+                    <th>Business Cert.</th>
+                    <th>Reasons for Declining</th>
+                </tr>
+                {% for user in decline_seller %}
+                <tr>
+                    <td>{{ user['surname'] }} {{ user['firstname'] }}</td>
+                    <td>{{ user['email'] }}</td>
+                    <td>{{ user['contact'] }}</td>
+                    <td>
+                        <img src="{{ url_for('uploaded_id_file', filename=user['id_upload']) }}" alt="Uploaded ID" style="width: 150px; height: 150px;">
+                    </td>
+                    <td>
+                        <img src="{{ url_for('uploaded_cert_file', filename=user['business_cert_upload']) }}" alt="Uploaded Business Certificate" style="max-width: 90px; max-height: 90px;">
+                    </td>
+                    <td>{{ user['decline_reason'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/seller_inventory.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <title>BOOKEDIA Seller's Inventory Page</title>
+</head>
+<body>
+    <!-- Inventory Page Structure -->
+    <div id="seller">
+        <div class="header_container">
+            <div class="logo">
+                <img src="../static/logo/bookedia logo.png" alt="Bookedia Logo">
+            </div>
+            <div class="icons">
+                <a href="{{ url_for('seller_accounts_message') }}">
+                    <img src="{{ url_for('static', filename='icons/chat-round-dots-svgrepo-com 5.png') }}" alt="Message Icon" class="icon">
+                </a>
+                <a href="{{ url_for('seller_notification') }}">
+                    <img src="{{ url_for('static', filename='icons/Bell.png') }}" alt="Bell Icon" class="icon">
+                </a>
+                <div class="profilepic">
+                    <button class="dropbtn"><img src="../static/icons/user.png" class="pfp"><img src="/static/icons/Expand_down.png" class="arrowdown"></button>
+                    <div class="dropdown-account">
+                        <a href="{{ url_for('seller_accounts') }}">Account</a>
+                        <a href="/logout">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav>
+            <ul>
+                <li>
+                    <div class="home">
+                        <img src="../static/icons/Home1.png" alt="Home Icon">
+                        <a href="{{ url_for('seller_home') }}" id="homePage">Home</a>
+                    </div>
+                    <div class="inventory">
+                        <img src="../static/icons/Boxes_light.png" alt="Inventory Icon">
+                        <a href="{{ url_for('seller_inventory') }}" id="inventoryPage">Inventory</a>
+                    </div>
+                    <div class="transaction">
+                        <img src="../static/icons/Transger_light.png" alt="Transaction Icon">
+                        <a href="{{ url_for('seller_transactions') }}" id="transactionPage">Transaction</a>
+                    </div>
+                    <div class="shipping">
+                        <img src="../static/icons/fast 1.png" alt="Shipping Icon">
+                        <a href="{{ url_for('seller_shippingstatus') }}" id="shippingPage">Shipping Status</a>
+                    </div>
+                    <div class="shipping">
+                        <img src="../static/icons/fast 1.png" alt="Shipping Icon">
+                        <a href="{{ url_for('seller_accounts_salesreport' ) }}" id="shippingPage">Sales Report</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Inventory Page -->
+        <div class="inventory_frame">
+            <div class="inventory_ctn">
+                <div class="inventory_header">
+                    <h1>INVENTORY</h1>
+                </div>
+                <div class="inventory_func">
+                    <div class="inventory_search">
+                        <input type="search" placeholder="Search Product">
+                    </div>
+                    <div class="category_filter">
+                        <label for="categoryFilter">Filter by Category:</label>
+                        <select id="categoryFilter">
+                            <option value="all">All</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Childrens Literature">Childrens Literature</option>
+
+                            <option value="Lifestyle Magazine">Lifestyle Magazines</option>
+                            <option value="News and Current Affairs">News & Current Affairs</option>
+                            <option value="Special Interest">Special Interest</option>
+
+                            <option value="Music">Music</option>
+
+                            <option value="Movies">Movies</option>
+
+                            <option value="Video Games">Video Games</option>
+                            <option value="Consoles">Consoles</option>
+
+                            <option value="Educational DVDs">Educational Dvds</option>
+                        </select>
+                    </div>
+                    <div class="addproduct">
+                        <button type="button" data-toggle="modal" data-target="#addProductModal"><img src="/static/icons/Add_ring.png">Add Product</button>
+                    </div>
+                    <div class="archiveproduct">
+                        <button type="button" onclick="window.location.href='/archive_products'">
+                            <img src="/static/icons/Load_list.png" alt="View Archive">
+                        </button>
+                    </div>
+                    
+                </div>
+                <div class="inventory_maintable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr>
+                                <td><img src="{{ url_for('uploaded_product_file', filename=product.product_image) }}" alt="{{ product.product_name }}" style="width: 100px; height: auto;"></td>
+                                <td>{{ product.product_name }}</td>
+                                <td>{{ product.product_category }}</td>
+                                <td>{{ product.product_description }}</td>
+                                <td>{{ product.product_quantity }}</td>
+                                <td>₱{{ product.product_price }}</td>
+                                <td>
+                                    <!-- Edit Button -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateProductModal{{ product.id }}">
+                                        <img src="/static/icons/Edit_duotone_line.png">
+                                    </button>
+                                    <!-- Archive Button -->
+                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#archiveProductModal{{ product.id }}">
+                                        <img src="/static/icons/Load_list.png">
+                                    </button>
+                                    
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="archiveProductModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="archiveProductModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Archive Product</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{{ url_for('archive_product', id=product.id) }}" method="POST">
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to archive this product?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger">Archive</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Update Product Modal -->
+                            <div class="modal fade" id="updateProductModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="updateProductModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Update Product</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="{{ url_for('update_product', id=product.id) }}" method="POST" enctype="multipart/form-data">
+                                            <div class="modal-body">
+                                                <input type="text" class="form-control mb-3" name="product_name" value="{{ product.product_name }}" required>
+                                                <textarea class="form-control mb-3" name="product_description" rows="3" required>{{ product.product_description }}</textarea>
+                                                <input type="number" class="form-control mb-3" name="product_quantity" value="{{ product.product_quantity }}" required>
+                                                <input type="number" class="form-control mb-3" step="0.01" name="product_price" value="{{ product.product_price }}" required>
+                                                <input type="file" class="form-control-file" name="product_image">
+                                                <select class="form-control mb-3" name="product_category" required>
+                                                    <option value="" disabled>Select Category</option>
+                                                    
+                                                    <option value="Fiction" {% if product.product_category == 'Fiction' %}selected{% endif %}>Fiction</option>
+                                                    <option value="Non-Fiction" {% if product.product_category == 'Non-Fiction' %}selected{% endif %}>Non-Fiction</option>
+                                                    <option value="Childrens Literature" {% if product.product_category == 'Children Literature' %}selected{% endif %}>Childrens Literature</option>
+                        
+                                                    <option value="Lifestyle Magazine" {% if product.product_category == 'Lifestyle Magazine' %}selected{% endif %}>Lifestyle Magazines</option>
+                                                    <option value="News and current Affairs" {% if product.product_category == 'News and current Affairs' %}selected{% endif %}>News & Current Affairs</option>
+                                                    <option value="Special Interest" {% if product.product_category == 'Special Interest' %}selected{% endif %}>Special Interest</option>
+                        
+                                                    <option value="Music" {% if product.product_category == 'Music' %}selected{% endif %}>Music</option>
+                        
+                                                    <option value="Movies" {% if product.product_category == 'Movies' %}selected{% endif %}>Movies</option>
+                        
+                                                    <option value="Video Games" {% if product.product_category == 'Video Games' %}selected{% endif %}>Video Games</option>
+                                                    <option value="Consoles" {% if product.product_category == 'Consoles' %}selected{% endif %}>Consoles</option>
+                        
+                                                    <option value="Educational DVDs" {% if product.product_category == 'Educational DVDs' %}selected{% endif %}>Educational Dvds</option>
+                                                </select>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Product</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <form action="{{ url_for('add_product') }}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="text" class="form-control mb-3" name="product_name" placeholder="Product Name" required>
+                        <textarea class="form-control mb-3" name="product_description" rows="3" placeholder="Description" required></textarea>
+                        <input type="number" class="form-control mb-3" name="product_quantity" placeholder="Quantity" required>
+                        <input type="number" class="form-control mb-3" step="0.01" name="product_price" placeholder="Price" required>
+                        <input type="file" class="form-control-file mb-3" name="product_image" required>
+                        <select class="form-control mb-3" name="product_category" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Non-Fiction">Non-Fiction</option>
+                            <option value="Childrens Literature">Childrens Literature</option>
+
+                            <option value="Lifestyle Magazine">Lifestyle Magazines</option>
+                            <option value="News and Current Affairs">News & Current Affairs</option>
+                            <option value="Special Interest">Special Interest</option>
+
+                            <option value="Music">Music</option>
+
+                            <option value="Movies">Movies</option>
+
+                            <option value="Video Games">Video Games</option>
+                            <option value="Consoles">Consoles</option>
+
+                            <option value="Educational DVDs">Educational Dvds</option>
+             
+
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+        <script>
+            // D R O P D O W N   B U T T O N
+                // Add event listener to the dropdown button
+                document.querySelector('.dropbtn').addEventListener('click', function(event) {
+                    // Prevent default behavior
+                    event.preventDefault();
+        
+                    // Toggle the "show" class on the dropdown content
+                    const dropdown = document.querySelector('.dropdown-account');
+                    dropdown.classList.toggle('show');
+        
+                    // Optionally, you can add the rotation effect for the arrow icon here
+                    const arrowIcon = document.querySelector('.arrowdown');
+                    arrowIcon.classList.toggle('rotate'); // Toggle rotation class
+                });
+        
+                // Close the dropdown if the user clicks outside of the dropdown or the button
+                window.addEventListener('click', function(event) {
+                    // If the click is outside the dropdown and the button, close the dropdown
+                    if (!event.target.closest('.profilepic')) {
+                        document.querySelector('.dropdown-account').classList.remove('show');
+                        
+                        // Reset the arrow icon rotation
+                        const arrowIcon = document.querySelector('.arrowdown');
+                        arrowIcon.classList.remove('rotate'); // Remove rotation class
+                    }
+                });
+        
+                // Get all the anchor links
+                const links = document.querySelectorAll('nav ul li a');
+        
+                // Add click event listener to each link
+                links.forEach(link => {
+                    link.addEventListener('click', function(event) {
+                        // Remove 'active' class from all links
+                        links.forEach(l => l.classList.remove('active'));
+        
+                        // Add 'active' class to the clicked link
+                        this.classList.add('active');
+        
+                        // Close the dropdown if it's open
+                        const dropdown = document.querySelector('.dropdown-account');
+                        if (dropdown.classList.contains('show')) {
+                            dropdown.classList.remove('show');
+        
+                            // Reset the arrow icon rotation
+                            const arrowIcon = document.querySelector('.arrowdown');
+                            arrowIcon.classList.remove('rotate'); // Remove rotation class
+                        }
+                    });
+                });
+                // F I L T E R   C A T E G O R Y
+                document.getElementById("categoryFilter").addEventListener("change", function () {
+                const selectedCategory = this.value.toLowerCase(); // Get the selected category in lowercase
+                const rows = document.querySelectorAll(".inventory_maintable tbody tr"); // Select all rows
+
+                rows.forEach(row => {
+                    const categoryCell = row.cells[2].textContent.toLowerCase(); // Get the text of the category cell in lowercase
+
+                    // Show rows that match the selected category or show all if "all" is selected
+                    if (selectedCategory === "all" || categoryCell === selectedCategory) {
+                    row.style.display = ""; // Show the row
+                    } else {
+                    row.style.display = "none"; // Hide the row
+                    }
+                });
+                });
+document.querySelector('input[type="search"]').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('table tbody tr');
+    rows.forEach(row => {
+        const productName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        if (productName.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+        </script>
+</body>
+</html>

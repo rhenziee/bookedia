@@ -1,0 +1,1628 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    transition: opacity 0.5s ease; /* Smooth transition effect */
+    opacity: 1; /* Start fully visible */
+}
+
+/*##############################################################################################################*/
+/*############################################   F O N T S  ####################################################*/
+/*##############################################################################################################*/
+
+@font-face{
+    font-family: "SF_BLACK";
+    src: url(FONTS/SF_BLACK.ttf);
+}
+
+@font-face{
+    font-family: "SF_BOLD";
+    src: url(FONTS/SF_BOLD.OTF);
+}
+
+@font-face{
+    font-family: "SF_REGULAR";
+    src: url(FONTS/SF_REGULAR.OTF);
+}
+
+@font-face{
+    font-family: "SF_MEDIUM";
+    src: url(FONTS/SF_MEDIUM.OTF);
+}
+
+@font-face {
+    font-family: "SF_LIGHT";
+    src: url(FONTS/FontsFree-Net-SFProDisplay-Light.ttf);
+}
+
+
+body{
+    background: #FAF9F6;
+}
+
+
+
+
+
+/*##############################################################################################################*/
+/*################################################  H E A D E R  ###############################################*/
+/*##############################################################################################################*/
+
+ .header_container {
+    display:flex;
+    align-items: center;
+    background-color: #FAF9F6;     
+    position: fixed;
+    top: 0; 
+    width: 100%; 
+    z-index: 9999;
+}
+
+
+
+
+
+
+/*##############################################################################################################*/
+/*##################################################  L O G O ##################################################*/
+/*##############################################################################################################*/
+
+.logo img {
+    margin-left: 40px;
+    width: 280px;
+    height: auto;
+    padding: 20px;
+    z-index: 9999;
+}
+
+
+
+
+/*##############################################################################################################*/
+/*#################################  I C O N S N A V B A R  ####################################################*/
+/*##############################################################################################################*/
+
+.icons{
+    display:flex;
+    align-items: center;
+    margin-left: 750px;
+}
+
+.message, .notification, .profilepic{
+    margin-right: 25px;
+}
+
+.message img{
+    width: 35px;
+    height: 35px;
+    transition: transform 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect: gentle zoom */
+.message img:hover {
+    transform: scale(1.2); /* Slightly zoom in on hover */
+}
+
+
+.notification img{
+    width: 40px;
+    height: 40px;
+}
+
+/* Default styles for the message and notification icons */ 
+.notification img {
+    transition: transform 0.5s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect: mild shake and gentle zoom */
+.notification img:hover {
+    animation: mild-shake 0.3s ease-in-out; /* Mild shake animation */
+    transform: scale(1.10); /* Slightly zoom in on hover */
+}
+
+/* Keyframes for mild shake animation */
+@keyframes mild-shake {
+    0%, 100% { transform: translateX(0); } /* Start and end in the same position */
+    25% { transform: translateX(-2px); }   /* Move slightly to the left */
+    50% { transform: translateX(2px); }    /* Move slightly to the right */
+    75% { transform: translateX(-2px); }   /* Back to left */
+}
+
+
+.profilepic img{
+    width: 40px;
+    height: 40px;
+}
+
+.icons button{
+    border: none;
+    background-color: #FAF9F6;
+}
+.arrowdown {
+    width: 30px; /* Original width */
+    height: 30px; /* Original height */
+    transition: transform 0.3s ease; /* Animation for rotation */
+}
+
+/* Rotate the arrow when the button is hovered */
+.dropbtn:hover .arrowdown {
+    transform: rotate(180deg); /* Rotate 180 degrees on hover */
+}
+
+.profilepic {
+    position: relative; /* Ensure relative positioning to anchor the dropdown */
+    z-index: 1500;
+}
+
+/* Profile picture and dropdown arrow inside the button */
+.dropbtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.pfp {
+    width: 40px; /* Adjust the size as needed */
+    height: 40px;
+    border-radius: 50%; /* Makes the profile picture circular */
+    transition: transform 0.3s ease; /* Smooth zoom transition */
+}
+
+/* Zoom effect on hover */
+.pfp:hover {
+    transform: scale(1.1); /* Slightly zoom in the profile picture */
+}
+
+.arrowdown {
+    width: 16px;
+    height: 16px;
+    margin-left: 10px; /* Add spacing between profile pic and arrow */
+}
+
+/* Dropdown menu - initially hidden */
+.dropdown-account {
+    position: absolute;
+    top: 50px; /* Position it below the profile picture */
+    right: 0;
+    background-color: #AD6639; /* Adjust the color */
+    border-radius: 5px;
+    padding: 5px;
+    display: none; /* Hidden by default */
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 100;
+}
+
+/* Dropdown links */
+.dropdown-account a {
+    font-family: "SF_MEDIUM";
+    color: #fff;
+    padding: 8px 12px;
+    display: block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for dropdown links */
+.dropdown-account a:hover {
+    background-color: #AD6639; /* Hover effect for background color */
+    transform: scale(1.10); /* Slightly zoom in the Log Out link */
+}
+
+/* Show dropdown when active */
+.profilepic.active .dropdown-account {
+    display: block;
+    opacity: 1;
+    transform: translateY(0); /* Slide down effect */
+}
+
+
+
+
+
+/*##############################################################################################################*/
+/*################################################  N A V B A R   ##############################################*/
+/*##############################################################################################################*/
+
+nav {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    top: 0;
+    z-index: 2500;
+    width: 100%;
+    background-color: #884B25;
+    margin-top: 95px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    user-select: none;
+}
+
+nav ul li{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-decoration: none;
+    margin-left: 30px;
+}
+
+nav ul li a{
+    text-decoration: none;
+    color: white;
+    font-family: 'SF_MEDIUM';
+    letter-spacing: 1px;
+    font-size: 20px;
+}
+
+nav ul li div {
+    text-decoration: none;
+    color: white;
+    font-family: 'SF_MEDIUM';
+    letter-spacing: 1px;
+    font-size: 20px;
+    margin: 0 85px 0 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease; /* Transition effect for text */
+}
+
+nav ul li div {
+    text-decoration: none;
+    color: white;
+    font-family: 'SF_MEDIUM';
+    letter-spacing: 1px;
+    font-size: 20px;
+    margin: 0 85px 0 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease; /* Transition effect for text */
+}
+
+nav ul li a::after {
+    content: '';
+    width: 0;
+    height: 4px;
+    background: white;
+    position: absolute;
+    left: 0;
+    bottom: -12px;
+    transition: 0.6s ease;
+}
+
+nav ul li a:hover::after {
+    width: 105%;
+}
+
+nav ul li a.active::after {
+    width: 105%;
+}
+
+.home, .inventory, .transaction, .shipping, .store {
+    display: flex;
+    align-items: center;
+}
+
+.home img, .inventory img, .transaction img, .shipping img{
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth transform and filter for icons */
+}
+
+.store img {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+}
+
+nav ul li div a {
+    padding-top: 10px;
+}
+
+
+
+nav ul li div:hover img {
+    transform: scale(1.1); /* Scale the icon slightly on hover */
+    filter: brightness(1.2); /* Brighten the icon on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul li a {
+        margin: 15px 0;
+        font-size: 18px;
+    }
+
+    nav ul li div {
+        margin-bottom: 15px;
+    }
+
+    nav {
+        height: auto;
+        margin-top: 0;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    nav ul li a {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+
+    nav ul li div img {
+        width: 25px;
+        height: 25px;
+    }
+
+    nav {
+        padding: 10px;
+        background-color: #6d3b1d; /* Slightly darker for better visibility on small screens */
+    }
+}
+
+
+
+
+
+/*##############################################################################################################*/
+/*#################################  D A S H B O A R D H O M E  ################################################*/
+/*##############################################################################################################*/
+
+.dashboard-stats1 {
+    display: flex;                   
+    justify-content: space-around;   
+    margin-bottom: 10px;  
+    width: 400px;
+    height: 200px;
+    top: 20px;
+    position: relative;
+}
+
+.CONTAINER1 {
+    background-color: #FFFFFF;       
+    border-radius: 10px;             
+    padding: 10px;            
+    width: 150px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    text-align: center;             
+    flex: 3;                         
+    margin: 0 30px;                 
+    position: relative;
+    top: 210px;
+    left: 100px;
+
+             
+}
+
+.CONTAINER1 h1 {
+    font-family:"SF_MEDIUM" ; 
+    font-size:70px;                 
+    color: #884B25;  
+    margin-top: 50px;                  
+    margin: 15px 0 0 0;              
+    position: relative;
+    left: 1px;
+    top: 20px;            
+}
+
+
+.CONTAINER1 .brown-bar1 {
+    background-color: #AD6639;       
+    height: 50px;                    
+    width: 95%;                    
+    position: relative;              
+    top: 10px;                         
+    left: 5px;   
+    border-radius: 9px;   
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);                    
+   
+}
+
+.CONTAINER1 .brown-bar1 p {
+    font-family:"SF_MEDIUM" ; 
+    margin: 0;                       
+    padding: 0;       
+    font-size: 25px;                         
+    color: white;
+    position: absolute;
+    left: 15px;    
+    top: 8px;                
+}
+
+
+.CONTAINER1 .brown-bar1 img {
+    position: relative;
+    height:5px;       
+    width: 25px;        
+    cursor: pointer;    
+    margin: 0;         
+    padding: 0;
+    top: 15px;  
+    left: 130px;
+}
+
+
+
+
+
+.dashboard-stats2 {
+    display: flex;                   
+    justify-content: space-around;   
+    margin-bottom: 10px;  
+    width: 400px;
+    height: 200px;
+    top: 25px;
+    position: relative;
+}
+
+.CONTAINER2 {
+    background-color: #FFFFFF;       
+    border-radius: 10px;             
+    padding: 10px;            
+    width: 200px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    text-align: center;             
+    flex: 3;                         
+    margin: 0 30px;                 
+    position: relative;
+    top: -5px;
+    left: 489px;
+
+             
+}
+
+.CONTAINER2 h1 {
+    font-family:"SF_MEDIUM" ; 
+    font-size: 70px;                 
+    color: #884B25;  
+    margin-top: 50px;                  
+    margin: 15px 0 0 0;              
+    position: relative;
+    left: 1px;
+    top: 20px;            
+}
+
+
+.CONTAINER2 .brown-bar2 {
+    background-color: #AD6639;       
+    height: 50px;                    
+    width: 95%;                    
+    position: relative;              
+    top: 10px;                         
+    left: 5px;   
+    border-radius: 9px;   
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);                    
+   
+}
+
+.CONTAINER2 .brown-bar2 p {
+    font-family:"SF_MEDIUM" ; 
+    margin: 0;                       
+    padding: 0;       
+    font-size: 25px;                         
+    color: white;
+    position: absolute;
+    left: 15px;    
+    top: 8px;                
+}
+
+
+.CONTAINER2 .brown-bar2 img {
+    position: relative;
+    height: 5px;       
+    width: 25px;        
+    cursor: pointer;    
+    margin: 0;         
+    padding: 0;
+    top: 15px;  
+    left: 130px;
+}
+
+
+
+
+
+
+
+
+
+.dashboard-stats3 {
+    display: flex;                   
+    justify-content: space-around;   
+    margin-bottom: 10px;  
+    width: 400px;
+    height: 200px;
+    top: 25px;
+    position: relative;
+}
+
+.CONTAINER3 {
+    background-color: #FFFFFF;       
+    border-radius: 10px;             
+    padding: 10px;            
+    width: 200px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+    text-align: center;             
+    flex: 3;                         
+    margin: 0 30px;                 
+    position: relative;
+    top: -215px;
+    left: 880px;
+
+             
+}
+
+.CONTAINER3 h1 {
+    font-family:"SF_MEDIUM" ; 
+    font-size: 70px;                 
+    color: #884B25;  
+    margin-top: 50px;                  
+    margin: 15px 0 0 0;              
+    position: relative;
+    left: 1px;
+    top: 20px;            
+}
+
+
+.CONTAINER3 .brown-bar3 {
+    background-color: #AD6639;       
+    height: 50px;                    
+    width: 95%;                    
+    position: relative;              
+    top: 10px;                         
+    left: 5px;   
+    border-radius: 9px;   
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);                    
+   
+}
+
+.CONTAINER3 .brown-bar3 p {
+    font-family:"SF_MEDIUM" ; 
+    margin: 0;                       
+    padding: 0;       
+    font-size: 25px;                         
+    color: white;
+    position: absolute;
+    left: 15px;    
+    top: 8px;                
+}
+
+
+.CONTAINER3 .brown-bar3 img {
+    position: relative;
+    height: 5px;       
+    width: 25px;        
+    cursor: pointer;    
+    margin: 0;         
+    padding: 0;
+    top: 15px;  
+    left: 130px;
+}
+
+
+
+
+
+
+
+
+
+/*##############################################################################################################*/
+/*##########################################  H O M E   S E C T I O N  #########################################*/
+/*##############################################################################################################*/
+
+#Home {
+    background-color: #F5F5F5; /* Light background color */
+    padding: 20px; /* Add padding for spacing */
+    text-align: center; /* Center align the content */
+    width: 100%; /* Full width */
+    position: relative; /* Position relative to allow positioning adjustments */
+}
+
+/* DASHBOARD TEXT STYLING */
+.Home_text {
+    margin-top: 20px; /* Space above the title */
+}
+
+.Home_text h1 {
+    font-family: 'SF_BOLD'; 
+    font-weight: bolder;
+    font-size: 40px; 
+    color: #884B25; 
+    letter-spacing: 5px; 
+    margin: 0; 
+    position: absolute;
+    top: 200px;
+    left: 100px;
+}
+
+
+
+/*##############################################################################################################*/
+/*#################################  U S E R  S T A T I S T I C   C H A R T  ###################################*/
+/*##############################################################################################################*/
+.user-stats {
+    background-color: #FFFFFF;       
+    padding: 55px;                     
+    border-radius: 10px;               
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+    margin: 10px 0;               
+    text-align: left;                
+    max-width: 600px;        
+    max-height: 500px;         
+    position: relative;
+    height: 700px;
+    top: -150px; 
+    left: 130px;
+    width: 800px;      
+
+}
+
+
+
+
+
+
+
+/* SMALL CHARTS */
+.small-chart user-stats {
+    width: 500px;                 
+    height: 600px;     
+    max-width: 1000px;
+    max-height: 1000px;       
+    padding: 10px;                    
+    margin: 0 auto;                  
+    display: block;
+    position: relative;
+    text-align: left;
+    left: 20px;
+    left: 10px;
+    font-size: 40px;
+
+
+   
+}
+
+/* HEADER STYLE */
+.user-stats h2 {
+    color: #884B25;                    
+    font-family: 'SF_MEDIUM';            
+    font-size: 30px;                  
+    text-align: left;  
+    margin-top: 5px;             
+    margin: 0;     
+    position: relative;
+    top: 5px;
+    left: 5px;
+                        
+}
+
+
+
+
+/*##############################################################################################################*/
+/*################################  A C T I V E  U S E  R  C H A R T  ##########################################*/
+/*##############################################################################################################*/
+.active-users {
+    background-color: #884B25; 
+    border-radius: 10px; 
+    padding: 5px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    text-align: right; 
+    color: white; 
+    max-width: 450px;        
+    max-height: 500px;         
+    position: relative;
+    height: 750px;
+    top: -660px;
+    left: 800px;
+    width: 580px;  
+}
+.active-users canvas
+{
+    top:130px;
+    right: 20px;
+    max-width: 500px;        
+    max-height: 300px;
+    position: relative;
+    height: 10px;
+    width: 10px;
+}
+
+
+/* TEXT*/
+.active-users h3{
+    font-family: 'SF_LIGHT';
+    font-size: 30px; 
+    margin-bottom: 10px; 
+    position: relative;
+    bottom: 30px;
+    top: 30px;
+    right:125px;
+}
+
+.active-users h4 {
+    font-size: 25px; 
+    font-weight: bolder; 
+    margin-bottom: 0; 
+    position: relative;
+    top: 10px;
+    right:29px;
+    color: #D99A74;
+}
+.canvas-container h4 {
+    font-family: 'SF_LIGHT';
+    font-size: 70px; 
+    margin-bottom: 0; 
+    position: relative;
+    top: -500px;
+    left: -65%;
+    color: #ffffff;
+}
+
+.canvas-container h5 {
+    font-size: 25px; 
+    font-weight: bolder; 
+    margin-bottom: 0; 
+    position: relative;
+    top: -480px;
+    right: -3px;
+    color: #D99A74;
+}
+
+
+/* Chart container */
+.canvas-container {
+    position: relative; 
+    height: 250px; 
+    width: 100%; 
+    top: 200px;
+    right: 30px;
+
+}
+
+
+.canvas-container canvas {
+    max-width: 300%; 
+    height: 400px; 
+}
+
+
+/* Responsive Adjustments for Different Screen Sizes */
+@media (max-width: 1200px) {
+    .dashboard-stats1, .dashboard-stats2, .dashboard-stats3 {
+        width: 100%;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .CONTAINER1, .CONTAINER2, .CONTAINER3 {
+        width: 90%;
+        margin: 10px 0;
+        left: 0;
+        top: 10px;
+    }
+
+    .user-stats, .active-users {
+        width: 90%;
+        height: auto;
+        left: 0;
+        top: 10px;
+        margin-top: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-stats1, .dashboard-stats2, .dashboard-stats3 {
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .CONTAINER1, .CONTAINER2, .CONTAINER3 {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .user-stats {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .active-users {
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .CONTAINER1 h1, .CONTAINER2 h1, .CONTAINER3 h1 {
+        font-size: 50px;
+    }
+
+    .brown-bar1 p, .brown-bar2 p, .brown-bar3 p {
+        font-size: 18px;
+    }
+
+    .user-stats, .active-users {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .user-stats h2 {
+        font-size: 25px;
+    }
+
+    .active-users h3 {
+        font-size: 22px;
+    }
+
+    .active-users h4, .canvas-container h4 {
+        font-size: 18px;
+    }
+}
+
+
+/*##############################################################################################################*/
+/*############################  M A N A G E  U S E R S  S E C T I O N S  #######################################*/
+/*##############################################################################################################*/
+
+/*########################################################################*/
+/*############# A P P L I CA T I O N R Q S T  S E C T I O N  #############*/
+/*########################################################################*/
+
+.applicationrequest_text p{
+    font-family:"SF_BOLD" ;    
+    font-size: 30px; 
+    height: 10px;            
+    color: #884B25; 
+    padding-bottom: 5px;
+    position: relative;
+    top: 190px;
+    left: 20px;
+    
+}
+
+/*MAIN CONTAINER*/
+.applicationrqst_maintablectn {
+    width: 50%;
+    padding: 0px;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 230px;
+    position: relative;
+    left: 15px;
+    font-size: 20px;
+}
+
+/*TABLE CONTAINER*/
+
+.applicationrqst_maintable {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 20px;
+    color: #884B25;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "SF_LIGHT";
+}
+
+tr th{
+    color:#F5F5F5;
+    font-size: 10px;
+    font-family: "SF_LIGHT";
+}
+
+tr td{
+    color: #884B25;
+    font-size: 10px;
+
+}
+
+th, td {
+    padding: 1px 1px;
+    text-align: center;
+    font-size: 10px;
+}
+
+th {
+    background-color: #884B25; 
+    color: white;
+    font-size: 20px;
+}
+
+td {
+    border-bottom: 1px solid #ddd;
+}
+
+/*BUTTON STYLE*/
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button img {
+    width: 28px;
+    height: 28px;
+}
+
+
+.approved-btn img {
+    filter: hue-rotate(90deg); /* Gives green color */
+}
+
+.reject-btn img {
+    filter: hue-rotate(0deg); /* Keeps it default or red */
+}
+
+button:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        padding: 5px 5px;
+    }
+    
+    .applicationrqst_maintable {
+        overflow-x: auto;
+    }
+}
+
+
+
+
+/*########################################################################*/
+/*##############   D E C L I N E D R Q S T  S E C T I O N  ###############*/
+/*########################################################################*/
+
+.declinedrequest_text p{
+    font-family:"SF_BOLD" ;    
+    font-size: 30px; 
+    height: 10px;            
+    color: #884B25; 
+    padding-bottom: 5px;
+    position: relative;
+    top: -665px;
+    left: 720px;
+    
+}
+
+
+/*MAIN CONTAINER*/
+.declinedrqst_maintablectn {
+    width: 45%;
+    padding: 0px;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 90px;
+    position: relative;
+    left: 720px;
+    top: -715px;
+}
+
+/*TABLE CONTAINER*/
+
+.declinedrqst_maintable {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 20px;
+    color: #884B25;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "SF_LIGHT";
+}
+
+tr th{
+    color:#F5F5F5;
+    font-size: 15px;
+    font-family: "SF_LIGHT";
+}
+
+tr td{
+    color: #884B25;
+    font-size: 10px;
+
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 10px;
+}
+
+th {
+    background-color: #884B25; /* Dark green background for header */
+    color: white;
+}
+
+td {
+    border-bottom: 1px solid #ddd;
+}
+
+/*BUTTON STYLE*/
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button img {
+    width: 28px;
+    height: 28px;
+}
+
+
+.delete-btn img {
+    filter: hue-rotate(black); /* Gives green color */
+}
+
+
+button:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        padding: 10px 8px;
+    }
+    
+    .declinedrqst_maintable {
+        overflow-x: auto;
+    }
+}
+
+
+
+/*########################################################################*/
+/*################# A L L  A C C O U N T S   S E C T I O N  #######s#######*/
+/*########################################################################*/
+
+.allaccounts_text p{
+    font-family:"SF_BOLD" ;    
+    font-size: 30px; 
+    height: 10px;            
+    color: #884B25; 
+    padding-bottom: 5px;
+    position: relative;
+    top: -630px;
+    left: 50px;
+    
+}
+
+/*MAIN CONTAINER*/
+.allaccounts_maintablectn {
+    width: 80%;
+    padding: 0px;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 90px;
+    position: relative;
+    left: 120px;
+    top: -680px;
+}
+
+/*TABLE CONTAINER*/
+
+.allaccounts_maintable {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 20px;
+    color: #884B25;
+}
+
+ .allaccounts_maintable table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "SF_LIGHT";
+}
+
+.allaccounts_maintable tr th{
+    color:#F5F5F5;
+    font-size: 20px;
+    font-family: "SF_LIGHT";
+}
+
+.allaccounts_maintable tr td{
+    color: #884B25;
+    font-size: 20px;
+
+}
+.allaccounts_maintable th, td {
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.allaccounts_maintable th {
+    background-color: #884B25; /* Dark green background for header */
+    color: white;
+}
+
+.allaccounts_maintable td {
+    border-bottom: 1px solid #ddd;
+}
+
+/*BUTTON STYLE*/
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #884B25;
+}
+
+button img {
+    width: 28px;
+    height: 28px;
+    color: #884B25;
+}
+
+
+.edit-btn img {
+    filter:hue-rotate(10deg);
+}
+
+
+.delete-btn img {
+    filter: hue-rotate(0deg); /* Keeps it default or red */
+}
+
+button:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    th, td {
+        padding: 10px 8px;
+    }
+    
+    .allaccounts_maintable {
+        overflow-x: auto;
+    }
+}
+
+
+
+
+
+
+/*##############################################################################################################*/
+/*#################################  S A L E S  R E P O R T S E C T I O N  #####################################*/
+/*##############################################################################################################*/
+
+
+
+/*########################################################################*/
+/*############################  C O N T A I N E R ########################*/
+/*########################################################################*/
+.report_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 2000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.report-title {
+    font-family: "SF_BOLD";
+    font-size: 40px;
+    color: #884B25;
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 150px;
+}
+
+
+/*########################################################################*/
+/*#########################  FILTER SECTION ##############################*/
+/*########################################################################*/
+.filter_container {
+    width: 100%;
+    max-width: 565px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text_filter {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.text_filter p {
+    font-family: "SF_BOLD";
+    font-size: 17px;
+    color: #884B25;
+    margin: 0;
+    letter-spacing: 0.2em;
+}
+
+.dropdown-category {
+    width: 100%;
+    background-color: #AD6639;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    display: none;
+}
+
+.dropdown-category a {
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    font-family: "SF_MEDIUM";
+    font-size: 20px;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.dropdown-category a:hover {
+    background-color: #804C2C;
+}
+
+.dropdown-active {
+    display: block;
+}
+
+/*########################################################################*/
+/*##########################  DATE PICKER ###############################*/
+/*########################################################################*/
+.sort-by-date-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-left: 650px;
+    position: relative;
+}
+
+.sort-label,
+.to-label {
+    font-family: "SF_BOLD";
+    font-size: 20px;
+    color: #884B25;
+    margin-right: 10px;
+    margin-left: 10px;
+    text-wrap: nowrap;
+}
+
+.date-display {
+    display: flex;
+    align-items: center;
+    border: 1px solid #AD6639;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: #fff;
+    position: relative;
+}
+
+.date-input {
+    border: none;
+    outline: none;
+    font-size: 18px;
+    color: #884B25;
+    width: 170px;
+}
+
+.calendar {
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2; /* Ensure icons are on top */
+}
+.ui-datepicker td a:hover {
+    background-color: #884B25;
+    border-radius: 4px;
+}
+
+
+
+/*########################################################################*/
+/*###########################  SALES TABLE ##############################*/
+/*########################################################################*/
+.salestable_maintablectn {
+    width: 130%;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-left: -140px;
+}
+
+.salestable_maintable {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 20px;
+    color: #884B25;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 15px;
+    text-align: center;
+    font-size: 18px;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #884B25;
+    color: white;
+}
+
+.print_button {
+    width: 160px;
+    background-color: #884B25;
+    color: white;
+    font-size: 18px;
+    font-family: "SF_MEDIUM";
+    padding: 10px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+    top: 10px;
+    margin-left: 950px;
+}
+
+.print_button:hover {
+    background-color: #AD6639;
+}
+
+.print_button:active {
+    background-color: #722E1E;
+}
+
+/*########################################################################*/
+/*###########################  PRINT STYLES ##############################*/
+/*########################################################################*/
+@media print {
+    body {
+        transform: scale(0.95);
+        transform-origin: top left;
+        width: 100%;
+    }
+
+    .salestable_maintable table {
+        font-size: 0.9em;
+    }
+
+    .salestable_maintable table th,
+    .salestable_maintable table td {
+        padding: 8px;
+    }
+
+    .print-report {
+        margin: 0;
+        padding: 0;
+    }
+
+    .salestable_maintable table th:nth-child(2),
+    .salestable_maintable table td:nth-child(2) {
+        width: 150px;
+    }
+
+    .salestable_maintable table th:nth-child(4),
+    .salestable_maintable table td:nth-child(4) {
+        width: 120px;
+    }
+}
+
+
+
+
+
+
+/*##############################################################################################################*/
+/*#################################  S E T T I N G S  S E C T I O N S  #########################################*/
+/*##############################################################################################################*/
+
+.settings_container{
+    height: 5px;
+    width: 50%;
+    max-width: 400px;
+    margin: 10px auto; 
+    padding: 250px; 
+    background-color:#FFFFFF;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    gap: 10px; 
+    position: relative;
+    top:200px;
+  
+}
+
+.settings-brown-bar{
+    width: 230%;
+    max-width: 700px;
+    margin: 0 auto; 
+    padding: 25px 250px; 
+    background-color:#884B25;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    gap: 10px; 
+    position: relative;
+    top:-250px;
+    left: -250px;
+}
+
+
+.settings-text h1{
+    display: flex;
+    text-align: left;
+    color:#FFFFFF;
+    font-size: 20px;
+    font-family: "SF_LIGHT";
+    position: absolute;
+    left: 30px;
+    top: 16px;
+
+}
+
+/*########################################################################*/
+/*######################  P A S S W O R D   ##############################*/
+/*########################################################################*/
+
+
+
+.current_pass h1{
+    color: #000000;
+    margin: 15px;
+    font-size: 18px;
+    font-family: "SF_BOLD";
+    position: absolute;
+    left:40px;
+    top:80px
+    
+}
+
+.password {
+    font-size: 20px;
+    padding: 9px 70px;
+    border-radius: 9px;
+    border: 1px solid #884B25;
+    position: relative;
+    top: -185px;
+    left: -200px;
+
+}
+
+
+
+
+.new_pass h1{
+    color: black;
+    margin: 15px;
+    font-size: 18px;
+    font-family: "SF_BOLD";
+    position: absolute;
+    left:40px;
+    top:180px
+    
+}
+
+.newpass{
+    font-size: 20px;
+    padding: 9px 70px;
+    border-radius: 9px;
+    border: 1px solid #884B25;
+    position: relative;
+    top: -127px;
+    left: -200px;
+
+}
+
+
+
+.confirm_new_pass h1{
+    color: black;
+    margin: 15px;
+    font-size: 18px;
+    font-family: "SF_BOLD";
+    position: absolute;
+    left:40px;
+    top:280px
+    
+}
+
+.confirmpass {
+    font-size: 20px;
+    padding: 9px 70px;
+    border-radius: 9px;
+    border: 1px solid #884B25;
+    position: relative;
+    top: -75px;
+    left: -200px;
+
+}
+
+/*########################################################################*/
+/*###################  P A S S W O R D B U T T O N  ######################*/
+/*########################################################################*/
+.submit_button {
+    background-color: #884B25;  
+    color: white;               
+    font-size: 18px;          
+    font-family: "SF_MEDIUM";    
+    padding: 10px 25px;          
+    border: none;                
+    border-radius: 8px;         
+    cursor: pointer;           
+    transition: background-color 0.3s ease; 
+    position: absolute;
+    top:400px;
+    left: 150px;
+}
+
+
+
+/* Hover effect */
+.submit_button:hover {
+    background-color: #AD6639;   /* Change background color on hover */
+}
+
+/* Active button state */
+.submit_button:active {
+    background-color: #722E1E;   /* Change background color when clicked */
+}
+
+
+
+
+
+
+

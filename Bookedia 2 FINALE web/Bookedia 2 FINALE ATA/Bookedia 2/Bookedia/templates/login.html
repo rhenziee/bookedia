@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookedia Login</title>
+    <link rel="stylesheet" href="../static/loginstyles.css">
+</head>
+<body>
+    <!-- Slideshow Container -->
+    <div class="slideshow-container">
+        <div class="slideshow">
+            <div class="slide active" style="background-image: url('../static/slideshow/login_bg.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/dvd1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/educ1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Gaming1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/books2.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Magazines 1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Gaming3.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Movie1.png');"></div>
+            <div class="slide" style="background-image: url('../static/slideshow/Magazines2.png');"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="login-box">
+            <div class="left-side">
+                <div class="TEXT-LOGIN">
+                    <h1>LOG IN</h1>
+                </div>
+                <div class="logo">
+                    <img src="../static/icons/bookedia logo.png" alt="Bookedia Logo">
+                </div>
+                <div class="image">
+                    <img src="../static/icons/login_pic.png " alt="Login Illustration">
+                </div>
+            </div>
+            <div class="right-side">
+                <h1>WELCOME TO BOOKEDIA!</h1>
+                <h2>Log in to your account.</h2>
+                
+                <form action="/login" method="POST">
+           
+                        <div class="form-control">
+                            <img src="../static/icons/loginUsericon.png" class="icon" alt="User Icon">
+                            <input type="email" id="email" name="email" required>
+                            <label>
+                                <span>E</span>
+                                <span >m</span>
+                                <span >a</span>
+                                <span>i</span>
+                                <span >l</span>
+                            </label>
+                        </div>
+                        <div class="form-control">
+                           
+                            <img src="../static/icons/Lock_light.png" class="icon" alt="Lock Icon">
+                            <input type="password" id="password" name="password" required>
+                            <label>
+                                <span>P</span>
+                                <span >a</span>
+                                <span>s</span>
+                                <span>s</span>
+                                <span>w</span>
+                                <span>o</span>
+                                <span>r</span>
+                                <span>d</span>
+                            </label>
+                        </div>
+                        <div class="forgot"> 
+                            <a href="{{ url_for('forgot_email_verify') }}">Forgot Password?</a>
+                        </div>
+                       
+                        <button type="submit">
+                          LOGIN
+                        </button>
+                        
+                </form>
+                
+                <div class="options">
+                    <p>Don't have an account? <a href="{{ url_for('verify_email') }}">Sign up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for alert notification -->
+    {% if error %}
+    <div class="modal" id="alertModal" style="display:block;">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="alertMessage">{{ error }}</p>
+            <button onclick="closeModal()" class="okay-btn">Okay</button>
+        </div>
+    </div>
+    {% endif %}
+
+
+    
+
+    <script>
+        // Slideshow
+        let slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const slideInterval = setInterval(nextSlide, 2000);
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        // Modal Functions
+        function closeModal() {
+            document.getElementById('alertModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('alertModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

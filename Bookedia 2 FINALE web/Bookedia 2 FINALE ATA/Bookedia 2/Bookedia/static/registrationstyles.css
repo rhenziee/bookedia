@@ -1,0 +1,703 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+/*  F O N T S */
+@font-face{
+    font-family: "SF_BLACK";
+    src: url(FONTS/SF_BLACK.ttf);
+}
+
+@font-face{
+    font-family: "SF_BOLD";
+    src: url(FONTS/SF_BOLD.OTF);
+}
+
+@font-face{
+    font-family: "SF_REGULAR";
+    src: url(FONTS/SF_REGULAR.OTF);
+}
+
+@font-face{
+    font-family: "SF_MEDIUM";
+    src: url(FONTS/SF_MEDIUM.OTF);
+}
+
+@font-face {
+    font-family: "SF_LIGHT";
+    src: url(FONTS/FontsFree-Net-SFProDisplay-Light.ttf);
+}
+
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+
+
+
+/*##############################################################################################################*/
+/*#########################################  B G  S L I D E S H O W  ###########################################*/
+/*##############################################################################################################*/
+.slideshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; 
+    overflow: hidden; 
+}
+
+.slide {
+    width: 100%;
+    height: 100%;
+    background-size: cover; 
+    background-position: center; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0; 
+    transition: opacity 1s ease-in-out;
+}
+
+.active {
+    opacity: 0.5; 
+}
+
+
+/*##############################################################################################################*/
+/*#########################################  SIGN UP  F O R M   ##############################################*/
+/*##############################################################################################################*/
+.login-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; 
+    padding: 20px;
+}
+
+/* Right side for login form */
+.right-side {
+
+    background-color: #F7EED3;
+    padding: 80px;
+    border-radius: 0 15px 15px 0; 
+    width: 100%;
+    color: black; 
+    text-align: center;
+    z-index: 1;
+    position: relative; 
+    opacity: 200%;
+}
+
+/* Left side for textboxes */
+.left-side {
+    background-color: #432818;
+    padding: 20px;
+    border-radius: 15px; 
+    width: 57%;
+    z-index: 2;
+    color: white;
+    font-size: 18px;
+    position: relative; 
+    margin-right: -30px;
+}
+
+.right-side .logo img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 30px;
+    position: absolute;
+    left: 90px;
+    top: 40px
+}
+
+.right-side .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.right-side .image img {
+    width: 300px;
+    height: auto;
+    margin-top: 20px;
+}
+.TEXT-SIGNUP{
+    color:#432818;
+    position: relative;
+    top: 40px
+}
+
+.right-side label {
+    color: rgb(0, 0, 0);
+    font-size: 30px;
+    font-weight: 600;
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+
+
+
+/*##############################################################################################################*/
+/*######################################### I N P U T  F E I L D 1  #############################################*/
+/*##############################################################################################################*/
+
+.input-field1 {
+    font-family: "SF_MEDIUM";
+    display: flex;
+    justify-content: left;
+    margin-top: 7px;
+    margin-bottom: 20px;
+    padding: 0%;
+    position: relative; 
+    top:20px;
+    left: 40px  
+}
+
+.input-field1 input {
+    width: 50%;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-family: "SF_MEDIUM";
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    left: 30px;
+    top: -5px;
+}
+
+.input-field1 input::placeholder {
+    color: gray;
+    font-family: "SF_MEDIUM";
+    font-size: 15px;
+    position: relative;
+    left: 30px;
+    opacity: 0.7;
+}
+
+/* Add a focus effect */
+.input-field1 input:focus {
+    border-color: #AD6639; 
+}
+
+/* Add a hover effect */
+.input-field1 input:hover {
+    border-color: #AD6639;
+}
+
+
+/*##############################################################################################################*/
+/*######################################### I N P U T  F E I L D 2  #############################################*/
+/*##############################################################################################################*/
+
+.input-field2 {
+    font-family: "SF_MEDIUM";
+    display: flex;
+    justify-content: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0%;
+    position: relative; 
+    left: 25px;
+    top: 10px;
+}
+
+.input-field2 input {
+    width: 50%;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-family: "SF_MEDIUM";
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    left: 30px;
+    top: -5px;
+}
+
+.input-field2 input::placeholder {
+    color: gray;
+    font-family: "SF_MEDIUM";
+    font-size: 15px;
+    position: relative;
+    left: 30px;
+    opacity: 0.7;
+}
+
+/* Add a focus effect */
+.input-field2 input:focus {
+    border-color: #AD6639; 
+}
+
+/* Add a hover effect */
+.input-field2 input:hover {
+    border-color: #AD6639;
+}
+
+/*##############################################################################################################*/
+/*######################################### I N P U T  F E I L D 3  #############################################*/
+/*##############################################################################################################*/
+
+.input-field3 {
+    font-family: "SF_MEDIUM";
+    display: flex;
+    justify-content: left;
+    margin-top: 7px;
+    margin-bottom: 20px;
+    padding: 0%;
+    position: relative; 
+    left: 13px  
+}
+
+.input-field3 input {
+    width: 50%;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-family: "SF_MEDIUM";
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    left: 30px;
+    top: -5px;
+}
+
+.input-field3 input::placeholder {
+    color: gray;
+    font-family: "SF_MEDIUM";
+    font-size: 15px;
+    position: relative;
+    left: 30px;
+    opacity: 0.7;
+}
+
+/* Add a focus effect */
+.input-field3 input:focus {
+    border-color: #AD6639; 
+}
+
+/* Add a hover effect */
+.input-field3 input:hover {
+    border-color: #AD6639;
+}
+
+
+/*##############################################################################################################*/
+/*######################################### I N P U T  F E I L D 4  #############################################*/
+/*##############################################################################################################*/
+
+.input-field4 {
+    font-family: "SF_MEDIUM";
+    display: flex;
+    justify-content: left;
+    margin-top: 7px;
+    margin-bottom: 20px;
+    padding: 0%;
+    position: relative; 
+    left: 67px ;
+    top:-10px
+}
+
+.input-field4 input {
+    width: 50%;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-family: "SF_MEDIUM";
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    left: 30px;
+    top: -5px;
+}
+
+.input-field4 input::placeholder {
+    color: gray;
+    font-family: "SF_MEDIUM";
+    font-size: 15px;
+    position: relative;
+    left: 30px;
+    opacity: 0.7;
+}
+
+/* Add a focus effect */
+.input-field4 input:focus {
+    border-color: #AD6639; 
+}
+
+/* Add a hover effect */
+.input-field4 input:hover {
+    border-color: #AD6639;
+}
+
+/*##############################################################################################################*/
+/*######################################### I N P U T  F E I L D 5  #############################################*/
+/*##############################################################################################################*/
+
+.input-field5 {
+    font-family: "SF_MEDIUM";
+    display: flex;
+    justify-content: left;
+    margin-top: 7px;
+    margin-bottom: 20px;
+    padding: 0%;
+    position: relative; 
+    left: 50px ;
+    top:-15px
+}
+
+.input-field5 input {
+    width: 50%;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-family: "SF_MEDIUM";
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    left: 30px;
+    top: -5px;
+}
+
+.input-field5 input::placeholder {
+    color: gray;
+    font-family: "SF_MEDIUM";
+    font-size: 15px;
+    position: relative;
+    left: 30px;
+    opacity: 0.7;
+}
+
+/* Add a focus effect */
+.input-field5 input:focus {
+    border-color: #AD6639; 
+}
+
+/* Add a hover effect */
+.input-field5 input:hover {
+    border-color: #AD6639;
+}
+
+
+/*##############################################################################################################*/
+/*######################################### I N P U T  F E I L D 6  #############################################*/
+/*##############################################################################################################*/
+
+.input-field6 {
+    font-family: "SF_MEDIUM";
+    display: flex;
+    justify-content: left;
+    margin-top: 7px;
+    margin-bottom: 20px;
+    padding: 0%;
+    position: relative; 
+    left: 34px ;
+    top:-20px
+}
+
+.input-field6 input {
+    width: 50%;
+    padding: 5px 15px;
+    font-size: 15px;
+    font-family: "SF_MEDIUM";
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    left: 30px;
+    top: -5px;
+}
+
+.input-field6 input::placeholder {
+    color: gray;
+    font-family: "SF_MEDIUM";
+    font-size: 15px;
+    position: relative;
+    left: 30px;
+    opacity: 0.7;
+}
+
+/* Add a focus effect */
+.input-field6 input:focus {
+    border-color: #AD6639; 
+}
+
+/* Add a hover effect */
+.input-field6 input:hover {
+    border-color: #AD6639;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* MAIN */
+/* =============================================== */
+.radio-input-wrapper {
+    display: flex; /* Make the labels appear in one line */
+    gap: 20px; /* Add some space between the radio options */
+    align-items: center;
+  }
+  
+  .label {
+    display: flex;
+    align-items: center;
+    border-radius: 100px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: .3s;
+  }
+  
+  .label:hover,
+  .label:focus-within,
+  .label:active {
+    background: hsla(0, 0%, 80%, .14);
+  }
+  
+  .radio-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    z-index: -1;
+  }
+  
+  .radio-design {
+    width: 22px;
+    height: 22px;
+    border-radius: 100px;
+    background: linear-gradient(to right bottom, hsl(41, 59%, 72%), hsl(29, 79%, 44%));
+    position: relative;
+  }
+  
+  .radio-design::before {
+    content: '';
+    display: inline-block;
+    width: inherit;
+    height: inherit;
+    border-radius: inherit;
+    background: hsl(0, 0%, 90%);
+    transform: scale(1.1);
+    transition: .3s;
+  }
+  
+  .radio-input:checked+.radio-design::before {
+    transform: scale(0);
+  }
+  
+  .label-text {
+    color: hsl(0, 0%, 60%);
+    margin-left: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 900;
+    transition: .3s;
+  }
+  
+  .radio-input:checked~.label-text {
+    color: hsl(0, 0%, 40%);
+  }
+  
+.hidden {
+    display: none; 
+}
+
+.hidden .input-field {
+    margin-bottom: 5px;
+}
+
+/* uploading id and cert */
+
+.file-upload-container {
+    display: flex;
+    gap: 20px; /* Adjust the gap between the fields as needed */
+}
+
+.custom-file-upload {
+    height: 150px;
+    width: 160px; /* Fixed width for upload fields */
+    flex-direction: column;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #e8e8e8;
+    background-color: #212121;
+    padding: 1.5rem;
+    border-radius: 10px;
+}
+
+.custom-file-upload .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-file-upload .icon svg {
+    height: 40px;
+    fill: #e8e8e8;
+}
+
+.custom-file-upload .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.custom-file-upload .text span {
+    font-weight: 400;
+    color: #e8e8e8;
+}
+
+.custom-file-upload input {
+    display: none;
+}
+
+/* Adjust label margins for consistent spacing */
+.custom-file-upload label {
+    margin-bottom: 5px;
+    left: 20%;
+    width: 100px; /* Set the same width as the upload fields */
+    margin-top: 4%;
+}
+
+.idlabel{
+    margin-right:-26px;
+}
+.businesscertlabel {
+    margin-bottom: 5px;
+
+    margin-right: -70px;
+}
+
+
+
+/* Forgot password link */
+.forgot a {
+    color: #F4D3B2;
+    font-size: 14px;
+    margin-top: -10px;
+    text-decoration: none;
+    left: 0;
+    justify-content: left;
+    margin-left: 91px;
+    text-align: left;
+    display: block;
+}
+
+/* Button styles */
+.login-btn, .cancel-btn {
+    width: 40%;
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.login-btn {
+    background-color: #D98E54;
+}
+
+.cancel-btn {
+    background-color: #d42f2f;
+    margin-left: 10px;
+    margin-right: 40px;
+}
+
+.login-btn:hover {
+    background-color: #b16c3c;
+}
+
+/* No account message */
+.options {
+    margin-top: 20px;
+}
+
+.options p {
+    color: #F4D3B2;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.options a {
+    color: white;
+    font-size: 19px;
+}
+
+/* Modal styles */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #888;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Center the content */
+}
+
+.modal-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.modal-footer button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-footer button:hover {
+    background-color: #45a049;
+}

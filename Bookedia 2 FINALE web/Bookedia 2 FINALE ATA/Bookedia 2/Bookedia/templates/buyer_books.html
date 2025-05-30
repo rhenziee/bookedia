@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bookedia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='pages_styles.css') }}">
+    <!-- Include SweetAlert CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+    <!-- Header -->
+<div class="top_header">
+    <img src="..//static/icons/logo.png">
+    <div class="search">
+        <input type="text" id="search-input" placeholder="Search for books, albums, etc." />
+        <img src="../static/icons/search icon.png" id="search-btn" style="cursor: pointer;" />
+    </div>
+    
+<div class="top_header_icons">
+    <img src="../static/icons/basket.png" alt="Cart" class="cart-icon" onclick="window.location.href='/cart'" >
+    <img src="{{ url_for('static', filename='icons/chat-round-dots-svgrepo-com 5.png') }}" 
+    alt="Chat" 
+    class="chat-icon" 
+    style="width: 35px; height: 35px; cursor: pointer;" 
+    onclick="window.location.href='/messages'">
+
+    <div class="dropdown">
+        <img src="../static/icons/user.png" alt="User" class="usercon-icon" onclick="toggleDropdown()">
+      
+        <!-- Dropdown Menu -->
+        <div id="userDropdown" class="dropdown-content">
+          <a href="/pending">Orders</a>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+</div>
+</div>
+
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a onclick="window.location.href='/buyer_home'">Home</a></li>
+<!-- books -->
+            <li>
+                <a onclick="window.location.href='/buyer_books'">Books</a> 
+                <ul class="dropdown">
+                    <li><a href="#">Fiction</a></li>
+                    <li><a href="#">Non-Fiction</a></li>
+                </ul>
+            </li>
+
+<!-- magazine-->
+            <li>
+                <a onclick="window.location.href='/buyer_magazines'">Magazines & Periodicals</a>
+                <ul class="dropdown">
+                    <li><a href="#">Fashion</a></li>
+                    <li><a href="#">Technology</a></li>
+                    <li><a href="#">Lifestyle</a></li>
+                    <li><a href="#">Sports News</a></li>
+                </ul>
+            </li>
+<!-- music-->
+            <li>
+                <a onclick="window.location.href='/buyer_music'">Music</a> 
+                <ul class="dropdown">
+                    <li><a href="#">Pop</a></li>
+                    <li><a href="#">Rock</a></li>
+                    <li><a href="#">Jazz</a></li>
+                    <li><a href="#">Classical</a></li>
+                    <li><a href="#">Hiphop</a></li>
+                </ul>
+            </li>
+<!-- Movies -->
+            <li><a onclick="window.location.href='/buyer_movies'">Movies</a>
+                <ul class="dropdown">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Comedy</a></li>
+                    <li><a href="#">Drama</a></li>
+                    <li><a href="#">Horror</a></li>
+                    <li><a href="#">Sci-fi</a></li>
+                </ul>
+            </li>
+<!-- Gaming -->
+            <li><a onclick="window.location.href='/buyer_gaming'">Gaming</a>
+                <ul class="dropdown">
+                    <li><a href="#">Video Games</a></li>
+                    <li><a href="#">Consoles</a></li>
+                </ul>
+            </li>
+<!-- educ -->
+            <li><a onclick="window.location.href='/buyer_educ'">Edu DVDs</a>
+                <ul class="dropdown">
+                    <li><a href="#">History</a></li>
+                    <li><a href="#">Science</a></li>
+                    <li><a href="#">Math</a></li>
+                    <li><a href="#">Language</a></li>
+                    <li><a href="#">Arts</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="categories">
+        <div class="category-section">
+            <h2>Books</h2>
+            <div class="category-buttons">
+                <button onclick="scrollToSection('fiction_section')">Fiction</button>
+                <button onclick="scrollToSection('nonfiction_section')">Non-Fiction</button>
+                <button onclick="scrollToSection('childrensection')">Childrens Literature</button>
+                
+            </div>
+        </div>
+    
+        
+    </div>
+<!-- Scroll to Top Button -->
+<button id="scrollToTopBtn" title="Go to top">↑</button>
+
+    
+    <div class="container">
+        <h1 class="title"><span>Our  Pick For You</span></h1>
+        <div class="title-line"></div>
+    
+        <div class="book-section">
+            <div class="book-cover">
+                <img src="{{ url_for('uploaded_product_file', filename=monthly_pick.product_image) }}" alt="Book Cover">
+            </div>
+            <div class="book-info">
+                <h2 class="book-title">{{ monthly_pick.product_name }}</h2>
+                <p class="description">{{ monthly_pick.product_description }}</p>
+                <p class="price">₱ {{ monthly_pick.product_price }}</p>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Trending Products -->
+<section class="trending" id="trends">
+    <h2>Trending Products</h2>
+    <div class="trending_container">
+        <button class="arrow left-arrow">&lt;</button> <!-- Left Arrow -->
+        <div class="products" id="products-container">
+            {% for product in trending_products %}
+            <div class="product" data-product-id="{{ product.id }}">
+                <img src="{{ url_for('uploaded_product_file', filename=product.product_image) }}" alt="{{ product.product_name }}" style="width: 200px; height: 200px;">
+                <div class="content">
+                    <h3>{{ product.product_name }}</h3>
+                    <p>₱ {{ product.product_price }}</p>
+                    <p class="product-description" style="display: none;">{{ product.product_description }}</p>
+                </div>
+                <div class="button-container">
+                    <button class="toggle-description-button">Show Description</button>
+                    <button class="add-to-cart-button" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Add to Cart</button>
+                
+                    <button class="btn-buy-now" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Buy Now</button>
+                
+                    <button class="message-seller-button" 
+                        data-product-id="{{ product.id }}" 
+                        data-product-name="{{ product.product_name }}" 
+                        data-seller-id="{{ product.user_id }}"
+                        onclick="openInquireForm('{{ product.id }}', '{{ product.product_name }}', '{{ product.user_id }}')">Message Seller</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div id="search-results" style="display: none;"></div> 
+
+        <button class="arrow right-arrow">&gt;</button> <!-- Right Arrow -->
+    </div>
+</section>
+
+
+
+
+
+</body>
+<div id="overlay" style="display: none;"></div>
+<div class="adding-card" id="addingCardPopup" style="display: none;">
+    <div class="adding-image_container" id="adding-image_container">
+        <!-- This will be filled with the product image -->
+    </div>
+    <div class="product-details d-flex align-items-center">
+        <div class="adding-title me-3">
+            <span id="popupProductName">New brand name</span>
+        </div>
+        <div class="quantity">
+            <label for="quantityInput" class="form-label" >Quantity</label>
+            <input type="number" id="quantityInput" class="form-control quantity-input" value="1" min="1" />
+        </div>
+    </div>
+    
+    <div class="action">
+        <div class="price">
+            <span id="popupProductPrice"></span>
+        </div>
+        <button class="cart-button" id="addToCart">
+            <span>Add to cart</span>
+        </button>
+        <button class="cart-button" onclick="hideAddingCard()">
+            <span>CANCEL</span>
+        </button>
+        
+    </div>
+</div>
+
+
+
+
+<!-- buy now naman -->
+<!-- Master Container -->
+<div class="master-container" id="popupContainer" style="display: none;"> 
+    <div class="checkoutcard checkoutcart">
+        <label class="checkout-title">BUY NOW</label>
+        <div class="checkout-products">
+            <div class="checkout-product" id="cartProductContainer">
+                <img src="your-image-source.jpg" alt="Product Image" />
+                <div>
+                    <h3 class="product-name">Product Name</h3>
+                    <span class="product-price">₱ 100.00</span>
+                    <input type="number" class="quantity-input" value="1" min="1" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkoutcard checkout">
+        <label class="checkout-title">Checkout</label>
+        <div class="checkout-details">
+            <span>Your cart subtotal:</span><span id="cartSubtotal">₱ 0.00</span>
+            <span>Shipping fees:</span><span>₱ 50.00</span>
+            <span>Total Price:</span><span id="checkoutTotal">₱ 0.00</span>
+        </div>
+        <div class="checkout--footer">
+            <button class="cancel-btn" onclick="window.location.href='/buyer_home'">Cancel</button>
+            <button class="checkout-btn" onclick="window.location.href='/place_order'">Checkout</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Discover Section -->
+
+
+
+<section class="fiction-section" id="fiction_section">
+    <h4>Fiction</h4>
+    <div class="discoverproduct-grid">
+        {% for product in categorized_products['fiction'] %}
+        <div class="discoverproduct-box" data-product-id="{{ product.id }}">
+            <img src="{{ url_for('uploaded_product_file', filename=product.product_image) }}" alt="{{ product.product_name }}" style="width: 200px; height: 200px;">
+            <div class="discoverproduct-info">
+                <h3>{{ product.product_name }}</h3>
+                <p class="rating">⭐ 4.9</p>
+                <p class="price">₱ {{ product.product_price }}</p>
+                <p class="product-description" style="display: none;">{{ product.product_description }}</p>
+                <button class="btn-show-description">Show Description</button>
+                <div class="actions">
+                    <button class="add-to-cart-button" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Add To Cart</button>
+
+                    <button class="btn-buy-now" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Buy Now</button>
+
+                    <button class="message-seller-button" 
+                        data-product-id="{{ product.id }}" 
+                        data-product-name="{{ product.product_name }}" 
+                        data-seller-id="{{ product.seller_id }}"
+                        onclick="openInquireForm('{{ product.id }}', '{{ product.product_name }}', '{{ product.seller_id }}')">Message Seller</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+<section class="nonfiction-section" id="nonfiction_section">
+    <h4>Non-Fiction</h4>
+    <div class="discoverproduct-grid">
+        {% for product in categorized_products['non-fiction'] %}
+        <div class="discoverproduct-box" data-product-id="{{ product.id }}">
+            <img src="{{ url_for('uploaded_product_file', filename=product.product_image) }}" alt="{{ product.product_name }}" style="width: 200px; height: 200px;">
+            <div class="discoverproduct-info">
+                <h3>{{ product.product_name }}</h3>
+                <p class="rating">⭐ 4.9</p>
+                <p class="price">₱ {{ product.product_price }}</p>
+                <p class="product-description" style="display: none;">{{ product.product_description }}</p>
+                <button class="btn-show-description">Show Description</button>
+                <div class="actions">
+                    <button class="add-to-cart-button" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Add To Cart</button>
+
+                    <button class="btn-buy-now" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Buy Now</button>
+
+                    <button class="message-seller-button" 
+                        data-product-id="{{ product.id }}" 
+                        data-product-name="{{ product.product_name }}" 
+                        data-seller-id="{{ product.seller_id }}"
+                        onclick="openInquireForm('{{ product.id }}', '{{ product.product_name }}', '{{ product.seller_id }}')">Message Seller</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="children-section" id="childrensection">
+    <h4>Children's Literature</h4>
+    <div class="discoverproduct-grid">
+        {% for product in categorized_products['Childrens Literature'] %}
+        <div class="discoverproduct-box" data-product-id="{{ product.id }}">
+            <img src="{{ url_for('uploaded_product_file', filename=product.product_image) }}" alt="{{ product.product_name }}" style="width: 200px; height: 200px;">
+            <div class="discoverproduct-info">
+                <h3>{{ product.product_name }}</h3>
+                <p class="rating">⭐ 4.9</p>
+                <p class="price">₱ {{ product.product_price }}</p>
+                <p class="product-description" style="display: none;">{{ product.product_description }}</p>
+                <button class="btn-show-description">Show Description</button>
+                <div class="actions">
+                    <button class="add-to-cart-button" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Add To Cart</button>
+
+                    <button class="btn-buy-now" data-product-name="{{ product.product_name }}"
+                        data-product-image="{{ url_for('uploaded_product_file', filename=product.product_image) }}"
+                        data-product-price="{{ product.product_price }}">Buy Now</button>
+
+                    <button class="message-seller-button" 
+                        data-product-id="{{ product.id }}" 
+                        data-product-name="{{ product.product_name }}" 
+                        data-seller-id="{{ product.seller_id }}"
+                        onclick="openInquireForm('{{ product.id }}', '{{ product.product_name }}', '{{ product.seller_id }}')">Message Seller</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+    <script>
+
+const navbarHeight = document.querySelector('nav').offsetHeight;
+const extraPadding = 80;  
+
+
+function scrollToSection(sectionId) {
+    const targetSection = document.getElementById(sectionId);  
+    const sectionPosition = targetSection.getBoundingClientRect().top + window.pageYOffset - navbarHeight - extraPadding;
+
+    window.scrollTo({
+        top: sectionPosition,
+        behavior: 'smooth'
+    });
+}
+
+
+const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+window.onscroll = function() {
+  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+    scrollToTopBtn.style.display = "block";  // Show button
+  } else {
+    scrollToTopBtn.style.display = "none";   // Hide button
+  }
+};
+
+scrollToTopBtn.onclick = function() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'  
+  });
+};
+
+
+
+
+function toggleDropdown() {
+  const dropdown = document.getElementById('userDropdown');
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+// Close dropdown when clicking outside
+window.onclick = function (event) {
+  if (!event.target.matches('.usercon-icon')) {
+    const dropdown = document.getElementById('userDropdown');
+    if (dropdown.style.display === 'block') {
+      dropdown.style.display = 'none';
+    }
+  }
+};
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const leftArrow = document.querySelector('.left-arrow');
+    const rightArrow = document.querySelector('.right-arrow');
+    const productContainer = document.querySelector('.products');
+
+    const scrollAmount = 400; 
+
+    // Scroll left 
+    leftArrow.addEventListener('click', () => {
+        productContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+
+    // Scroll right when clicking the right arrow
+    rightArrow.addEventListener('click', () => {
+        productContainer.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    });
+});
+// para sa trending lang
+
+
+
+
+// para lumabas and descript
+document.addEventListener('DOMContentLoaded', function() {
+    const products = document.querySelectorAll('.product');
+
+    products.forEach(product => {
+        const toggleButton = product.querySelector('.toggle-description-button'); 
+        const description = product.querySelector('.product-description'); 
+
+        toggleButton.addEventListener('click', function(event) {
+
+            event.stopPropagation(); 
+
+            products.forEach(p => {
+                const desc = p.querySelector('.product-description');
+                desc.style.display = 'none'; 
+            });
+
+            if (description.style.display === 'none' || description.style.display === '') {
+                description.style.display = 'block'; 
+            } else {
+                description.style.display = 'none'; 
+            }
+        });
+    });
+});
+
+
+// description for the discover part
+document.addEventListener('DOMContentLoaded', function() {
+    const discoverProducts = document.querySelectorAll('.discoverproduct-box'); 
+
+    discoverProducts.forEach(product => {
+        const toggleButton = product.querySelector('.btn-show-description'); 
+        const description = product.querySelector('.product-description'); 
+
+        toggleButton.addEventListener('click', function(event) {
+            event.stopPropagation(); 
+
+            discoverProducts.forEach(p => {
+                const desc = p.querySelector('.product-description');
+                desc.style.display = 'none'; 
+            });
+
+            if (description.style.display === 'none' || description.style.display === '') {
+                description.style.display = 'block';
+            } else {
+                description.style.display = 'none'; 
+            }
+        });
+    });
+});
+
+
+
+
+
+
+function showAddingCard() {
+    document.getElementById('addingCardPopup').style.display = 'flex'; 
+    document.getElementById('overlay').style.display = 'block'; 
+}
+
+//  hide the modal
+function hideAddingCard() {
+    document.getElementById('addingCardPopup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none'; 
+}
+
+// Close modal 
+document.getElementById('overlay').addEventListener('click', function(event) {
+    const modal = document.getElementById('addingCardPopup');
+    if (event.target === this) {
+        hideAddingCard();
+    }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.add-to-cart-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const productName = this.getAttribute('data-product-name');
+            const productImage = this.getAttribute('data-product-image');
+            const productPrice = this.getAttribute('data-product-price');
+
+            document.getElementById('popupProductName').textContent = productName;
+
+            const imageContainer = document.getElementById('adding-image_container');
+            imageContainer.innerHTML = ''; 
+            const imgTag = document.createElement('img');
+            imgTag.src = productImage;
+            imgTag.alt = productName;
+            imgTag.style.width = '100%'; 
+            imageContainer.appendChild(imgTag);
+
+            document.getElementById('popupProductPrice').textContent = `₱ ${productPrice}`;
+            
+            document.getElementById('quantityInput').value = 1;
+
+            document.getElementById('addingCardPopup').style.display = 'block';
+        });
+    });
+
+    // add the item to the cart
+    document.getElementById('addToCart').addEventListener('click', function(event) {
+        event.preventDefault();
+
+        const productName = document.getElementById('popupProductName').innerText;
+        const quantity = parseInt(document.getElementById('quantityInput').value);
+        const priceText = document.getElementById('popupProductPrice').innerText;
+
+        const price = parseFloat(priceText.replace('₱', '').trim());
+
+        const productImage = document.querySelector('#adding-image_container img').src;
+
+const imageFilename = productImage.substring(productImage.lastIndexOf('/') + 1);
+
+        if (!productName || quantity <= 0 || isNaN(price)) {
+            alert('Please fill in all required fields correctly.');
+            console.log('Check values - Product Name:', productName, 'Quantity:', quantity, 'Price:', price);
+            return;  
+        }
+
+        const totalPrice = (price * quantity).toFixed(2); 
+
+        const cartData = {
+            product_name: productName,
+            quantity: quantity,
+            price: price,
+            product_image: imageFilename
+        };
+
+fetch('/add_to_cart', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(cartData)
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        console.log('Product added to cart');
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Product added to cart successfully!',
+            confirmButtonText: 'OK'
+        });
+        document.getElementById('quantityInput').value = 1;
+        hideAddingCard(); // Close the modal
+    } else {
+        console.error(data.error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: data.error,
+            confirmButtonText: 'OK'
+        });
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'An error occurred while adding to cart.',
+        confirmButtonText: 'OK'
+    });
+});
+
+});
+});
+
+// BUY NOW
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.btn-buy-now').forEach(button => {
+        button.addEventListener('click', function () {
+            const productName = this.getAttribute('data-product-name');
+            const productImage = this.getAttribute('data-product-image');
+            const productPrice = parseFloat(this.getAttribute('data-product-price'));
+
+            const cartProductContainer = document.getElementById('cartProductContainer');
+            cartProductContainer.innerHTML = '';
+
+            const productDiv = document.createElement('div');
+            productDiv.classList.add('checkout-product');
+            productDiv.innerHTML = `
+                <img src="${productImage}" alt="${productName}" style="width: 100px; height: auto;" />
+                <div>
+                    <span>${productName}</span><br>
+                    <label class="price small">₱ ${productPrice.toFixed(2)}</label>
+                </div>
+                <input type="number" min="1" value="1" class="quantity-input" />
+            `;
+            cartProductContainer.appendChild(productDiv);
+
+            const quantityInput = productDiv.querySelector('.quantity-input');
+            quantityInput.addEventListener('input', function () {
+                const newTotal = productPrice * parseInt(quantityInput.value);
+                updateSubtotal(newTotal);
+            });
+
+            updateSubtotal(productPrice);
+            document.querySelector('.master-container').style.display = 'block';
+        });
+    });
+
+    function updateSubtotal(price) {
+        const shippingFee = 50.00;
+        const total = price + shippingFee;
+        document.getElementById('cartSubtotal').textContent = `₱ ${price.toFixed(2)}`;
+        document.getElementById('checkoutTotal').textContent = `₱ ${total.toFixed(2)}`;
+    }
+function closePopup() {
+    document.getElementById('popupContainer').style.display = 'none';
+  }
+
+
+
+
+
+
+// Checkout Button
+document.querySelector('.checkout-btn').addEventListener('click', function () {
+    const productName = document.querySelector('.checkout-product span').textContent;
+    const quantity = parseInt(document.querySelector('.quantity-input').value);
+    const subtotal = parseFloat(document.getElementById('cartSubtotal').textContent.replace('₱ ', ''));
+    const shippingFee = 50.00;
+    const totalPrice = subtotal + shippingFee;
+
+    sessionStorage.setItem('orderData', JSON.stringify({
+        productName: productName,
+        quantity: quantity,
+        subtotal: subtotal,
+        shippingFee: shippingFee,
+        totalPrice: totalPrice
+    }));
+
+    window.location.href = '/place_order';
+});
+});
+
+
+
+
+
+
+
+// para di maka checkout pag wala
+document.getElementById('checkout-btn').addEventListener('click', () => {
+    const selectedItems = [...document.querySelectorAll('.item-checkbox:checked')].map(cb => cb.dataset.itemId);
+    if (selectedItems.length === 0) {
+        alert('Please select at least one item to checkout.');
+        return;
+    }
+    
+    const queryString = selectedItems.map(id => `itemId=${id}`).join('&');
+
+    window.location.href = `/place_order?${queryString}`;
+});
+
+
+
+// message
+
+    document.querySelectorAll('.message-seller-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            const sellerId = this.getAttribute('data-seller-id');
+            
+            console.log(`Redirecting to inquire page with product ID: ${productId}, seller ID: ${sellerId}`); // Add this for debugging
+
+            window.location.href = `/inquire?product_id=${productId}&seller_id=${sellerId}`;
+        });
+    });
+
+    function openInquireForm(productId, productName, sellerId) {
+        window.location.href = `/inquire.html?product_id=${productId}&product_name=${encodeURIComponent(productName)}&seller_id=${sellerId}`;
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+            const successMessage = "{{ get_flashed_messages(with_categories=True) | tojson | safe }}";
+            const errorMessage = "{{ get_flashed_messages(with_categories=True) | tojson | safe }}";
+
+            if (successMessage) {
+                successMessage.forEach(function (msg) {
+                    Swal.fire({
+                        title: msg[0] === 'success' ? 'Success!' : 'Error!',
+                        text: msg[1],
+                        icon: msg[0] === 'success' ? 'success' : 'error',
+                        confirmButtonText: 'OK'
+                    });
+                });
+            }
+        });
+
+
+// search
+document.getElementById('search-input').addEventListener('input', function() {
+    const query = this.value;
+    console.log(`Searching for: ${query}`); 
+    if (query.length > 0) {
+        fetch(`/search?query=${query}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Search results:', data); 
+                const searchResults = document.getElementById('search-results');
+                searchResults.innerHTML = ''; 
+                
+                if (data.length > 0) {
+                    data.forEach(product => {
+                        const productDiv = document.createElement('div');
+                        productDiv.classList.add('product');
+                        productDiv.innerHTML = `
+                            <img src="${product.product_image}" alt="${product.product_name}" style="width: 200px; height: 200px;">
+                            <div class="content">
+                                <h3>${product.product_name}</h3>
+                                <p>₱ ${product.product_price}</p>
+                                <p class="product-description">${product.product_description}</p>
+                            </div>
+                            <div class="button-container">
+                                <button class="add-to-cart-button" data-product-name="${product.product_name}"
+                                    data-product-image="${product.product_image}"
+                                    data-product-price="${product.product_price}">Add to Cart</button>
+                                <button class="btn-buy-now" data-product-name="${product.product_name}"
+                                    data-product-image="${product.product_image}"
+                                    data-product-price="${product.product_price}">Buy Now</button>
+                                <button class="message-seller-button" 
+                                    data-product-id="${product.id}" 
+                                    data-seller-id="${product.seller_id}"
+                                    onclick="openInquireForm('${product.id}', '${product.product_name}')">Message Seller</button>
+                            </div>
+                        `;
+                        searchResults.appendChild(productDiv);
+                    });
+                    searchResults.style.display = 'block'; 
+                    document.getElementById('products-container').style.display = 'none'; 
+                } else {
+                    searchResults.style.display = 'none'; 
+                    document.getElementById('products-container').style.display = 'block'; 
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    } else {
+        document.getElementById('search-results').style.display = 'none'; 
+        document.getElementById('products-container').style.display = 'block'; 
+    }
+});
+
+
+// view message
+
+
+
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,212 @@
+import 'package:flutter/material.dart';
+import 'verify_email.dart';
+
+void main() {
+  runApp(MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false));
+}
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  LoginPageState createState() => LoginPageState();
+}
+
+class LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Upper Section
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color(0xFFF7EED3),
+                borderRadius: BorderRadius.horizontal(
+                  left: Radius.circular(20),
+                  right: Radius.circular(20),
+                ),
+              ),
+
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('lib/assets/Bookedia.png', height: 100),
+                  const SizedBox(height: 20),
+                  Image.asset('lib/assets/loginicon.png', height: 100),
+                ],
+              ),
+            ),
+
+            // Lower Section
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: Color(0xFF432818),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 20,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Log in to your account.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Email
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.email, color: Colors.white),
+                          labelText: "Email",
+                          labelStyle: TextStyle(color: Colors.white),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        style: TextStyle(color: Colors.white),
+                        cursorColor: Colors.white,
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Password
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.lock, color: Colors.white),
+                          labelText: "Password",
+                          labelStyle: TextStyle(color: Colors.white),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        style: TextStyle(color: Colors.white),
+                        cursorColor: Colors.white,
+                      ),
+                      const SizedBox(height: 30),
+
+                      // Login Button
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // ignore: avoid_print
+                            print("Email: ${_emailController.text}");
+                            // ignore: avoid_print
+                            print("Password: ${_passwordController.text}");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF884B25),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 40,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          child: Text(
+                            "Log In",
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Sign-up & Forgot Password
+                      Center(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account?",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                const EmailVerificationPage(),
+                                      ),
+                                    );
+                                  },
+
+                                  child: Text(
+                                    "Sign up",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xFFF7931E),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(
+                                "Forgot Password?",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
